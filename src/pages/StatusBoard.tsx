@@ -67,7 +67,8 @@ const F = {
   ACCOUNTING: "55-1681",          // 메뉴 구조 > Frame 138 "포인트 회계 관리"
 };
 
-const figmaUrl = (nodeId: string) => `${FIGMA_BASE}${nodeId}`;
+const figmaUrl = (nodeId: string) =>
+  nodeId.startsWith("https://") ? nodeId : `${FIGMA_BASE}${nodeId}`;
 
 const categories: Category[] = [
   {
@@ -82,7 +83,7 @@ const categories: Category[] = [
         status: "planned",
         priority: "P0",
         description: "컬러·타이포그래피·스페이싱·아이콘 토큰 정의",
-        figmaNodeId: F.GNB_SNB_GRID,
+        figmaNodeId: "https://www.figma.com/design/eSnbIS4Se7bvgZZIHHcvdQ/-PC--B2B-Design-System-v1.1.1?t=PypqEkGj3KgGad9J-0",
       },
       {
         name: "사이트 그리드",
