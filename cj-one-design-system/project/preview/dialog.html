@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Dialog</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>body{margin:0;padding:0;background:#EDF0F5;font-family:var(--font-sans);height:340px;display:grid;place-items:center;}
+  .scrim{position:absolute;inset:0;background:rgba(0,0,0,.5);}
+  .dlg{position:relative;background:#fff;border-radius:20px;box-shadow:var(--shadow-modal);width:480px;max-width:calc(100% - 48px);padding:32px;}
+  .title{font:700 20px/28px var(--font-sans);color:#000;margin:0 0 8px;}
+  .body{font:400 15px/23px var(--font-sans);color:#434343;margin:0 0 24px;}
+  .actions{display:flex;justify-content:flex-end;gap:8px;}
+  .b{height:40px;border-radius:8px;border:0;padding:0 16px;font:700 14px/26px var(--font-sans);cursor:pointer;}
+  .ghost{background:#EDF0F5;color:#262626;}
+  .primary{background:#ED27CF;color:#fff;}
+</style></head>
+<body>
+  <div class="scrim"></div>
+  <div class="dlg">
+    <h3 class="title">정산 데이터를 삭제하시겠습니까?</h3>
+    <p class="body">삭제된 데이터는 복구할 수 없습니다. 신중히 진행해 주세요.</p>
+    <div class="actions"><button class="b ghost">취소</button><button class="b primary">삭제</button></div>
+  </div>
+</body></html>

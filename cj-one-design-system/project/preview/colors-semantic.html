@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Colors — Semantic</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:20px;background:#fff;font-family:var(--font-sans);}
+  .row{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+  .item{display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid #EDF0F5;border-radius:8px;font-size:12px;}
+  .chip{width:28px;height:28px;border-radius:6px;border:1px solid rgba(28,28,67,.08);}
+  .name{font-weight:600;}
+  .val{margin-left:auto;color:#676E82;font-family:var(--font-mono);font-size:11px;}
+</style></head>
+<body>
+<div class="row">
+  <div class="item"><span class="chip" style="background:#000"></span><span class="name">--fg-primary</span><span class="val">#000</span></div>
+  <div class="item"><span class="chip" style="background:#262626"></span><span class="name">--fg-secondary</span><span class="val">#262626</span></div>
+  <div class="item"><span class="chip" style="background:#434343"></span><span class="name">--fg-tertiary</span><span class="val">#434343</span></div>
+  <div class="item"><span class="chip" style="background:#676E82"></span><span class="name">--fg-muted</span><span class="val">#676E82</span></div>
+  <div class="item"><span class="chip" style="background:#FFFFFF;border-color:#D8DCE5"></span><span class="name">--surface</span><span class="val">#FFFFFF</span></div>
+  <div class="item"><span class="chip" style="background:#EDF0F5"></span><span class="name">--bg-canvas</span><span class="val">#EDF0F5</span></div>
+  <div class="item"><span class="chip" style="background:#FDE9FA"></span><span class="name">--surface-pink</span><span class="val">#FDE9FA</span></div>
+  <div class="item"><span class="chip" style="background:#ED27CF"></span><span class="name">--surface-pink-bold</span><span class="val">#ED27CF</span></div>
+  <div class="item"><span class="chip" style="background:#1E192A"></span><span class="name">--surface-navy</span><span class="val">#1E192A</span></div>
+  <div class="item"><span class="chip" style="background:#D8DCE5"></span><span class="name">--border-default</span><span class="val">#D8DCE5</span></div>
+</div>
+</body></html>

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Notifications</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>body{margin:0;padding:20px;background:#fff;font-family:var(--font-sans);display:flex;flex-direction:column;gap:8px;}
+  .toast{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:8px;font:500 14px/20px var(--font-sans);}
+  .dot{width:6px;height:6px;border-radius:50%;margin-top:7px;}
+  .info{background:#E5E9FF;color:#1E2A8C;} .info .dot{background:#2142FF;}
+  .ok{background:#DDF6EA;color:#0B6E45;} .ok .dot{background:#00A862;}
+  .warn{background:#FFEFD9;color:#7A4500;} .warn .dot{background:#FF8A00;}
+  .err{background:#FFE5EA;color:#A0001F;} .err .dot{background:#FF0037;}
+  .x{margin-left:auto;color:inherit;opacity:.5;cursor:pointer;}
+</style></head>
+<body>
+<div class="toast info"><span class="dot"></span><span>정산 데이터가 업데이트되었습니다.</span><span class="x">×</span></div>
+<div class="toast ok"><span class="dot"></span><span>저장이 완료되었습니다.</span><span class="x">×</span></div>
+<div class="toast warn"><span class="dot"></span><span>승인 대기 중인 항목이 3건 있습니다.</span><span class="x">×</span></div>
+<div class="toast err"><span class="dot"></span><span>처리 중 오류가 발생했습니다. 다시 시도해 주세요.</span><span class="x">×</span></div>
+</body></html>

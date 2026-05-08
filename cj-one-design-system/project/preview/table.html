@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Table</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>body{margin:0;padding:20px;background:#fff;font-family:var(--font-sans);}
+  table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid #D8DCE5;border-radius:8px;overflow:hidden;}
+  th,td{font:500 13px/1.6 var(--font-sans);padding:10px 14px;text-align:left;border-bottom:1px solid #EDF0F5;}
+  th{background:#F5F6FA;color:#676E82;font-weight:700;}
+  tr:last-child td{border-bottom:0;}
+  tr:nth-child(even) td{background:#FAFBFD;}
+  .badge{padding:2px 8px;border-radius:9999px;font:700 11px/14px var(--font-sans);}
+  .ok{background:#DDF6EA;color:#00A862;}
+  .pend{background:#FFEFD9;color:#C56600;}
+  .err{background:#FFE5EA;color:#FF0037;}
+</style></head>
+<body>
+<table>
+<thead><tr><th>주문 번호</th><th>파트너</th><th>금액</th><th>상태</th><th>일시</th></tr></thead>
+<tbody>
+<tr><td>CJN-202410-00821</td><td>Olive Young</td><td>₩142,800</td><td><span class="badge ok">완료</span></td><td>2024.10.18 14:22</td></tr>
+<tr><td>CJN-202410-00820</td><td>VIPS</td><td>₩89,000</td><td><span class="badge pend">정산 대기</span></td><td>2024.10.18 14:08</td></tr>
+<tr><td>CJN-202410-00819</td><td>Tous Les Jours</td><td>₩12,500</td><td><span class="badge ok">완료</span></td><td>2024.10.18 13:51</td></tr>
+<tr><td>CJN-202410-00818</td><td>The Place Dining</td><td>₩—</td><td><span class="badge err">반려</span></td><td>2024.10.18 13:40</td></tr>
+</tbody>
+</table>
+</body></html>

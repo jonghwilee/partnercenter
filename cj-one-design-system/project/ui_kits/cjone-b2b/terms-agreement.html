@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>CJ ONE Business · 파트너센터 약관 동의</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box;}
+  html,body{height:100%;margin:0;}
+  body{background:var(--bg-canvas);color:var(--fg-secondary);font-family:var(--font-sans);}
+  button{font-family:inherit;cursor:pointer;border:0;}
+  a{color:inherit;text-decoration:none;}
+
+  /* ----- shell ----- */
+  .shell{min-height:100%;display:flex;flex-direction:column;}
+  .gnb{height:64px;background:#fff;border-bottom:1px solid var(--border-default);
+       display:flex;align-items:center;padding:0 40px;gap:12px;}
+  .lockup{display:flex;align-items:center;gap:8px;font:700 18px/1 var(--font-sans);letter-spacing:-0.02em;}
+  .lockup img{width:24px;height:24px;}
+  .lockup .b{color:var(--pink-400);}
+  .lockup .sub{font:500 12px/1 var(--font-sans);color:var(--gray-600);
+               background:var(--gray-100);padding:4px 8px;border-radius:6px;margin-left:6px;}
+  .gnb .right{margin-left:auto;display:flex;gap:16px;align-items:center;
+              font:500 13px/1 var(--font-sans);color:var(--gray-600);}
+  .gnb .right a{color:var(--gray-700);}
+  .gnb .right a:hover{color:#000;text-decoration:underline;}
+
+  .container{flex:1;display:flex;justify-content:center;padding:48px 24px 80px;}
+  .stack{width:100%;max-width:640px;}
+
+  /* ----- stepper ----- */
+  .stepper{display:flex;align-items:center;gap:12px;margin-bottom:32px;}
+  .step{display:flex;align-items:center;gap:10px;}
+  .step .dot{width:28px;height:28px;border-radius:9999px;display:grid;place-items:center;
+             font:700 13px/1 var(--font-sans);background:#fff;color:var(--gray-500);
+             border:1px solid var(--border-default);}
+  .step .lbl{font:500 13px/1 var(--font-sans);color:var(--gray-600);white-space:nowrap;}
+  .step.done .dot{background:var(--pink-50);color:var(--pink-400);border-color:var(--pink-100);}
+  .step.done .lbl{color:var(--gray-700);}
+  .step.now .dot{background:var(--pink-400);color:#fff;border-color:var(--pink-400);
+                 box-shadow:0 0 0 4px var(--pink-50);}
+  .step.now .lbl{color:#000;font-weight:700;}
+  .step .bar{width:32px;height:1px;background:var(--border-default);}
+  .stepper .sep{flex:0 0 auto;width:24px;height:1px;background:var(--border-default);}
+
+  /* ----- card ----- */
+  .card{background:#fff;border:1px solid rgba(28,28,67,.08);border-radius:20px;
+        box-shadow:var(--shadow-card);padding:40px;}
+  .card h1{margin:0 0 8px;font:700 28px/1.3 var(--font-sans);letter-spacing:-0.01em;color:var(--fg-primary);}
+  .card .lede{margin:0 0 32px;font:500 15px/23px var(--font-sans);color:var(--gray-600);}
+
+  /* ----- agreement block ----- */
+  .agree-all{display:flex;align-items:center;gap:12px;padding:20px 24px;
+             background:var(--pink-50);border:1px solid var(--pink-100);border-radius:12px;
+             margin-bottom:24px;cursor:pointer;}
+  .agree-all .label{font:700 16px/1.3 var(--font-sans);color:var(--fg-primary);}
+  .agree-all .help{font:500 12px/1 var(--font-sans);color:var(--gray-600);margin-top:4px;}
+  .agree-all .text{flex:1;}
+
+  .divider{height:1px;background:var(--border-default);margin:0 0 8px;}
+
+  .item{display:flex;align-items:center;gap:12px;padding:16px 8px;}
+  .item + .item{border-top:1px solid var(--gray-100);}
+  .item .label{flex:1;font:500 15px/1.5 var(--font-sans);color:var(--fg-secondary);}
+  .item .label .req{font:700 13px/1 var(--font-sans);color:var(--pink-400);margin-right:6px;}
+  .item .label .opt{font:700 13px/1 var(--font-sans);color:var(--gray-500);margin-right:6px;}
+  .item .view{font:500 13px/1 var(--font-sans);color:var(--gray-600);
+              padding:6px 10px;border-radius:6px;background:#fff;border:1px solid var(--border-default);}
+  .item .view:hover{background:var(--gray-50);color:#000;}
+
+  /* ----- checkbox ----- */
+  .cb{position:relative;width:22px;height:22px;flex:0 0 auto;display:inline-block;}
+  .cb input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;}
+  .cb .box{position:absolute;inset:0;border:1.5px solid var(--border-strong);
+           border-radius:6px;background:#fff;transition:background .12s ease-out,border-color .12s ease-out;}
+  .cb .box::after{content:"";position:absolute;left:6px;top:2px;width:6px;height:11px;
+                  border:solid transparent;border-width:0 2px 2px 0;transform:rotate(45deg);
+                  transition:border-color .12s ease-out;}
+  .cb input:checked + .box{background:var(--pink-400);border-color:var(--pink-400);}
+  .cb input:checked + .box::after{border-color:#fff;}
+  .cb.lg{width:24px;height:24px;}
+  .cb.lg .box::after{left:7px;top:3px;width:6px;height:12px;}
+
+  /* ----- buttons ----- */
+  .actions{display:flex;justify-content:space-between;gap:8px;margin-top:32px;}
+  .btn{height:48px;border-radius:8px;padding:0 24px;font:700 15px/1 var(--font-sans);
+       display:inline-flex;align-items:center;justify-content:center;gap:8px;
+       transition:background .12s ease-out,color .12s ease-out;min-width:120px;}
+  .btn-primary{background:var(--pink-400);color:#fff;}
+  .btn-primary:hover{background:var(--pink-500);}
+  .btn-primary:active{background:var(--pink-600);}
+  .btn-primary[disabled]{background:var(--surface-disabled);color:var(--fg-disabled);cursor:not-allowed;}
+  .btn-quat{background:#fff;color:var(--fg-secondary);border:1px solid var(--border-default);}
+  .btn-quat:hover{background:var(--gray-50);}
+  .btn-grow{flex:1;}
+
+  /* ----- footnote ----- */
+  .foot{margin-top:24px;text-align:center;font:500 12px/1.6 var(--font-sans);color:var(--gray-600);}
+  .foot a{color:var(--fg-link);}
+  .foot a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- Top bar (signup flow — minimal GNB, no nav) -->
+  <header class="gnb">
+    <div class="lockup">
+      <img src="../../assets/logos/cjone-symbol.svg" alt="CJ ONE">
+      <span>CJ <span class="b">ONE</span></span>
+      <span class="sub">Business</span>
+    </div>
+    <div class="right">
+      <span>도움이 필요하신가요?</span>
+      <a href="#">고객센터</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="stack">
+
+      <!-- Stepper: 비즈니스 회원가입 → 약관 동의 (current) → 추가 정보 입력 -->
+      <div class="stepper" aria-label="회원가입 단계">
+        <div class="step done"><span class="dot">1</span><span class="lbl">비즈니스 회원가입</span></div>
+        <div class="sep"></div>
+        <div class="step now"><span class="dot">2</span><span class="lbl">파트너센터 약관 동의</span></div>
+        <div class="sep"></div>
+        <div class="step"><span class="dot">3</span><span class="lbl">추가 정보 입력</span></div>
+      </div>
+
+      <!-- Card -->
+      <section class="card">
+        <h1>파트너센터 약관에 동의해 주세요</h1>
+        <p class="lede">
+          CJ ONE 파트너센터 이용을 위해 아래 약관 내용을 확인하신 후 동의해 주시기 바랍니다.
+          필수 항목은 동의하셔야 다음 단계로 진행하실 수 있습니다.
+        </p>
+
+        <!-- 전체 동의 -->
+        <label class="agree-all" for="agree-all">
+          <span class="cb lg">
+            <input type="checkbox" id="agree-all">
+            <span class="box"></span>
+          </span>
+          <span class="text">
+            <div class="label">전체 약관에 동의합니다</div>
+            <div class="help">필수 및 선택 항목 전체에 동의하는 것을 의미합니다</div>
+          </span>
+        </label>
+
+        <div class="divider"></div>
+
+        <!-- 항목 1 — 필수 -->
+        <label class="item" for="t1">
+          <span class="cb">
+            <input type="checkbox" id="t1" checked>
+            <span class="box"></span>
+          </span>
+          <span class="label">
+            <span class="req">[필수]</span>서비스 이용약관 동의
+          </span>
+          <a href="#" class="view">전문 보기</a>
+        </label>
+
+        <!-- 항목 2 — 필수 -->
+        <label class="item" for="t2">
+          <span class="cb">
+            <input type="checkbox" id="t2">
+            <span class="box"></span>
+          </span>
+          <span class="label">
+            <span class="req">[필수]</span>개인정보 수집 및 이용 동의
+          </span>
+          <a href="#" class="view">전문 보기</a>
+        </label>
+
+        <!-- 항목 3 — 선택 -->
+        <label class="item" for="t3">
+          <span class="cb">
+            <input type="checkbox" id="t3">
+            <span class="box"></span>
+          </span>
+          <span class="label">
+            <span class="opt">[선택]</span>마케팅 정보 수신 동의
+          </span>
+          <a href="#" class="view">전문 보기</a>
+        </label>
+
+        <!-- 액션 -->
+        <div class="actions">
+          <button class="btn btn-quat" type="button">이전</button>
+          <button class="btn btn-primary btn-grow" type="button" id="next" disabled>다음</button>
+        </div>
+      </section>
+
+      <p class="foot">
+        문의 사항은 <a href="#">파트너센터 운영팀</a>으로 연락해 주시기 바랍니다.
+      </p>
+
+    </div>
+  </main>
+</div>
+
+<script>
+  // 전체 동의 ↔ 개별 동의 동기화 + 다음 버튼 활성화
+  const all = document.getElementById('agree-all');
+  const items = ['t1','t2','t3'].map((id) => document.getElementById(id));
+  const required = ['t1','t2'].map((id) => document.getElementById(id));
+  const next = document.getElementById('next');
+
+  function refresh(){
+    all.checked = items.every((i) => i.checked);
+    next.disabled = !required.every((i) => i.checked);
+  }
+  all.addEventListener('change', () => {
+    items.forEach((i) => { i.checked = all.checked; });
+    refresh();
+  });
+  items.forEach((i) => i.addEventListener('change', refresh));
+  refresh();
+</script>
+</body>
+</html>

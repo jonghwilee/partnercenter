@@ -1,0 +1,228 @@
+/* ==========================================================================
+   CJ ONE B2B Design System — Colors & Typography
+   Source: [PC] B2B Design System v1.1.1.fig
+   ========================================================================== */
+
+/* ---- Pretendard webfont (Korean + Latin) -------------------------------- */
+@font-face { font-family: "Pretendard"; src: url("fonts/Pretendard-Thin.ttf") format("truetype");       font-weight: 100; font-style: normal; font-display: swap; }
+@font-face { font-family: "Pretendard"; src: url("fonts/Pretendard-ExtraLight.ttf") format("truetype"); font-weight: 200; font-style: normal; font-display: swap; }
+@font-face { font-family: "Pretendard"; src: url("fonts/Pretendard-Light.ttf") format("truetype");      font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: "Pretendard"; src: url("fonts/Pretendard-Regular.ttf") format("truetype");    font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Pretendard"; src: url("fonts/Pretendard-Medium.ttf") format("truetype");     font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: "Pretendard"; src: url("fonts/Pretendard-SemiBold.ttf") format("truetype");   font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Pretendard"; src: url("fonts/Pretendard-Bold.ttf") format("truetype");       font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Pretendard"; src: url("fonts/Pretendard-ExtraBold.ttf") format("truetype");  font-weight: 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "Pretendard"; src: url("fonts/Pretendard-Black.ttf") format("truetype");      font-weight: 900; font-style: normal; font-display: swap; }
+
+:root {
+  /* ====================================================================
+     ATOMIC COLORS  — raw palette
+     ==================================================================== */
+
+  /* Brand: Pink (signature) */
+  --pink-50:  #FDE9FA;
+  --pink-100: #F9B4EE;
+  --pink-200: #F47DDF;
+  --pink-300: #F156D9;
+  --pink-400: #ED27CF;     /* primary brand pink — buttons, links, focus */
+  --pink-500: #C71BAF;
+  --pink-600: #99178A;
+  --pink-700: #66115E;
+  --pink-800: #33042D;     /* deepest pink, used for navy alt */
+
+  /* Brand: Navy / Indigo (header & dark surfaces) */
+  --navy-50:  #E5E9FF;
+  --navy-100: #B7C2FF;
+  --navy-300: #617CFF;
+  --navy-500: #2142FF;     /* link / accent navy */
+  --navy-700: #2C1054;
+  --navy-900: #1E192A;     /* primary dark surface */
+  --navy-950: #19171C;     /* deepest fg dark */
+
+  /* Neutrals — Gray */
+  --white:    #FFFFFF;
+  --gray-50:  #F5F6FA;
+  --gray-100: #EDF0F5;
+  --gray-200: #D8DCE5;
+  --gray-300: #BFC5D2;
+  --gray-400: #9D9D9D;
+  --gray-500: #7B7B7B;
+  --gray-600: #676E82;
+  --gray-700: #434343;
+  --gray-800: #262626;
+  --gray-900: #1C1C43;
+  --black:    #000000;
+
+  /* Status */
+  --success:  #00A862;
+  --info:     #2142FF;
+  --warning:  #FF8A00;
+  --error:    #FF0037;
+
+  /* Subtle status backgrounds */
+  --error-subtle:   #FFE5EA;
+  --info-subtle:    #E5E9FF;
+  --success-subtle: #DDF6EA;
+  --warning-subtle: #FFEFD9;
+
+  /* ====================================================================
+     SEMANTIC COLORS  — use these in product
+     ==================================================================== */
+
+  /* Foreground (text) */
+  --fg-primary:    #000000;
+  --fg-secondary:  #262626;
+  --fg-tertiary:   #434343;
+  --fg-muted:      #676E82;
+  --fg-disabled:   #BFC5D2;
+  --fg-placeholder:#9D9D9D;
+  --fg-on-dark:    #FFFFFF;
+  --fg-on-pink:    #FFFFFF;
+  --fg-link:       #2142FF;
+  --fg-pink:       #ED27CF;
+  --fg-warning:    #FF0037;
+  --fg-success:    #00A862;
+
+  /* Background / Surface */
+  --bg-canvas:        #EDF0F5;   /* page background (cool gray) */
+  --bg-canvas-alt:    #F5F6FA;   /* lighter table/zebra row */
+  --surface:          #FFFFFF;   /* card */
+  --surface-hover:    #F5F6FA;
+  --surface-pink:     #FDE9FA;   /* selected/highlighted (light) */
+  --surface-pink-bold:#ED27CF;   /* primary CTA fill */
+  --surface-navy:     #1E192A;   /* dark header / dark mode card */
+  --surface-navy-alt: #33042D;   /* darkest pink-tinted surface */
+  --surface-subtle:   #F5F6FA;
+  --surface-disabled: #EDF0F5;
+  --surface-overlay:  rgba(0, 0, 0, 0.5);   /* dim */
+
+  /* Border / Line */
+  --border-subtle:  #E9E9E9;
+  --border-default: #D8DCE5;
+  --border-strong:  #BFC5D2;
+  --border-focus:   #ED27CF;
+  --border-on-dark: rgba(255, 255, 255, 0.12);
+
+  /* Brand gradients (used on hero / cover) */
+  --grad-cjone-light: linear-gradient(135deg, #617CFF 0%, #8652FF 20%, #ED27CF 100%);
+  --grad-cjone-dark:  linear-gradient(135deg, #ED27CF 0%, #8652FF 40%, #617CFF 100%);
+
+  /* ====================================================================
+     RADII   (Figma: Radius page)
+     ==================================================================== */
+  --radius-0:   0px;
+  --radius-xs:  4px;
+  --radius-sm:  6px;
+  --radius-md:  8px;     /* buttons, inputs, chips */
+  --radius-lg:  12px;
+  --radius-xl:  16px;
+  --radius-2xl: 20px;    /* cards, modals */
+  --radius-3xl: 28px;
+  --radius-pill:9999px;
+
+  /* ====================================================================
+     ELEVATION / SHADOWS   (Figma: Shadow page)
+     ==================================================================== */
+  --shadow-card:    0 4px 72px 0 rgba(208, 208, 240, 0.10);   /* default card */
+  --shadow-soft:    0 2px 12px 0 rgba(28, 28, 67, 0.06);
+  --shadow-pop:     0 8px 24px 0 rgba(28, 28, 67, 0.10);      /* dropdown */
+  --shadow-modal:   0 16px 48px 0 rgba(28, 28, 67, 0.16);     /* dialog */
+  --shadow-inner:   inset 0 0 0 1px rgba(28, 28, 67, 0.10);
+
+  /* ====================================================================
+     SPACING  (8-pt grid)
+     ==================================================================== */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-30: 120px;
+
+  /* Layout (Figma: Layout page)  — desktop B2B 1440 grid */
+  --container-max:    1440px;
+  --container-gutter: 40px;
+
+  /* ====================================================================
+     TYPOGRAPHY — token scale
+     family: Pretendard. Letter-spacing -0.015em on display (>=24).
+     ==================================================================== */
+  --font-sans: "Pretendard", "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+               "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  --font-mono: ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo, monospace;
+
+  /* Font sizes captured from the Figma Typography page */
+  --text-12: 12px;
+  --text-13: 13px;
+  --text-14: 14px;
+  --text-15: 15px;
+  --text-16: 16px;
+  --text-18: 18px;
+  --text-20: 20px;
+  --text-24: 24px;
+  --text-25: 25px;
+  --text-32: 32px;
+  --text-36: 36px;
+  --text-40: 40px;
+
+  /* Weights */
+  --w-regular:  400;
+  --w-medium:   500;
+  --w-semibold: 600;
+  --w-bold:     700;
+}
+
+/* ============================================================
+   SEMANTIC TYPE CLASSES — match Figma named styles
+   ============================================================ */
+
+.cj-display-1, h1.cj { /* "Display / 40 / Bold" */
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  color: var(--fg-secondary);
+}
+.cj-display-2 { /* "Display / 36 / Bold" */
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1;
+}
+.cj-h1 { font: 700 32px/42px var(--font-sans); letter-spacing: -0.01em; color: var(--fg-primary); }
+.cj-h2 { font: 700 32px/1   var(--font-sans); letter-spacing: -0.01em; color: var(--fg-primary); }
+.cj-h3 { font: 700 25px/1   var(--font-sans); color: var(--fg-primary); }
+.cj-h4 { font: 700 24px/34px var(--font-sans); color: var(--fg-primary); }
+.cj-h5 { font: 700 20px/28px var(--font-sans); color: var(--fg-primary); }
+.cj-h6 { font: 700 18px/26px var(--font-sans); color: var(--fg-primary); }
+
+.cj-body-lg     { font: 400 18px/28px var(--font-sans); color: var(--fg-secondary); }
+.cj-body        { font: 400 16px/26px var(--font-sans); color: var(--fg-secondary); }
+.cj-body-md     { font: 400 15px/23px var(--font-sans); color: var(--fg-secondary); }
+.cj-body-sm     { font: 400 14px/21px var(--font-sans); color: var(--fg-secondary); }
+.cj-body-xs     { font: 400 13px/20px var(--font-sans); color: var(--fg-tertiary); }
+.cj-caption     { font: 500 12px/16px var(--font-sans); color: var(--fg-muted); }
+
+.cj-label       { font: 500 13px/1   var(--font-sans); color: var(--fg-tertiary); }
+.cj-button      { font: 700 15px/26px var(--font-sans); }
+.cj-button-sm   { font: 700 13px/16px var(--font-sans); }
+.cj-tag         { font: 700 12px/16px var(--font-sans); letter-spacing: 0.01em; }
+
+.cj-link        { color: var(--fg-link); text-underline-offset: 2px; }
+.cj-link:hover  { text-decoration: underline; }
+
+/* Reset baseline */
+html, body {
+  font-family: var(--font-sans);
+  color: var(--fg-secondary);
+  background: var(--bg-canvas);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}

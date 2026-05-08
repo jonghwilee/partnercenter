@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>Logo lockups</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:20px;background:#EDF0F5;font-family:"Pretendard",-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;}
+  .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  .card{background:#fff;border:1px solid #D8DCE5;border-radius:16px;padding:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;min-height:120px;}
+  .card.dark{background:#1E192A;}
+  .card.grad{background:linear-gradient(135deg,#617CFF 0%,#8652FF 50%,#ED27CF 100%);}
+  .lbl{font:500 11px/1 ui-monospace,"SF Mono",Menlo,monospace;color:#9D9D9D;letter-spacing:.04em;text-transform:uppercase;}
+  .card.dark .lbl,.card.grad .lbl{color:rgba(255,255,255,.75);}
+  .lockup img{display:block;}
+  .invert{filter:brightness(0) invert(1);}
+</style></head>
+<body>
+
+<div class="grid" style="margin-bottom:12px;">
+  <div class="card">
+    <div class="lockup"><img src="../assets/logos/cjone-business-official.svg" alt="CJ ONE Business" height="28"></div>
+    <span class="lbl">CJ ONE Business · primary</span>
+  </div>
+  <div class="card dark">
+    <div class="lockup"><img class="invert" src="../assets/logos/cjone-business-official.svg" alt="CJ ONE Business" height="28"></div>
+    <span class="lbl">on navy #1E192A</span>
+  </div>
+  <div class="card grad">
+    <div class="lockup"><img class="invert" src="../assets/logos/cjone-business-official.svg" alt="CJ ONE Business" height="28"></div>
+    <span class="lbl">on brand gradient</span>
+  </div>
+</div>
+
+<div class="grid" style="margin-bottom:12px;">
+  <div class="card">
+    <div class="lockup"><img src="../assets/logos/cjone-admin-official.svg" alt="CJ ONE Business Admin" height="28"></div>
+    <span class="lbl">CJ ONE Admin · primary</span>
+  </div>
+  <div class="card dark">
+    <div class="lockup"><img class="invert" src="../assets/logos/cjone-admin-official.svg" alt="CJ ONE Business Admin" height="28"></div>
+    <span class="lbl">Admin · on navy</span>
+  </div>
+  <div class="card">
+    <div class="lockup"><img src="../assets/logos/cjone-wordmark-horizontal.svg" alt="CJ ONE" height="22"></div>
+    <span class="lbl">CJ ONE wordmark</span>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <div class="lockup"><img src="../assets/logos/cjone-symbol.svg" alt="symbol" width="40" height="40"></div>
+    <span class="lbl">symbol · 40</span>
+  </div>
+  <div class="card" style="flex-direction:row;justify-content:space-around;gap:24px;">
+    <img src="../assets/logos/cjone-symbol.svg" width="48" height="48" alt="">
+    <img src="../assets/logos/cjone-symbol.svg" width="32" height="32" alt="">
+    <img src="../assets/logos/cjone-symbol.svg" width="20" height="20" alt="">
+  </div>
+  <div class="card dark" style="flex-direction:row;justify-content:space-around;gap:24px;">
+    <img src="../assets/logos/cjone-symbol.svg" width="48" height="48" alt="">
+    <img src="../assets/logos/cjone-symbol.svg" width="32" height="32" alt="">
+    <img src="../assets/logos/cjone-symbol.svg" width="20" height="20" alt="">
+  </div>
+</div>
+
+</body></html>

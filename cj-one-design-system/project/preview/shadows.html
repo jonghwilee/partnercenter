@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Shadows</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>body{margin:0;padding:32px;background:#EDF0F5;font-family:var(--font-sans);}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;}
+  .card{background:#fff;height:100px;border-radius:16px;display:flex;align-items:flex-end;padding:14px;font:500 12px/1.2 var(--font-mono);color:#676E82;}
+</style></head>
+<body>
+  <div class="grid">
+    <div class="card" style="box-shadow:var(--shadow-soft)">soft</div>
+    <div class="card" style="box-shadow:var(--shadow-card)">card</div>
+    <div class="card" style="box-shadow:var(--shadow-pop)">pop</div>
+    <div class="card" style="box-shadow:var(--shadow-modal)">modal</div>
+  </div>
+</body></html>

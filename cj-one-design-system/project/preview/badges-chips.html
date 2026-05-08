@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>Badges &amp; Chips</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:24px;background:#EDF0F5;font-family:var(--font-sans);color:#262626;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .card{background:#fff;border:1px solid #D8DCE5;border-radius:20px;padding:20px 24px;}
+  .card h6{margin:0 0 14px;font:700 13px/1 var(--font-sans);letter-spacing:.02em;color:#262626;}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px;}
+  .row:last-child{margin-bottom:0;}
+  .lbl{width:64px;font:500 11px/1 var(--font-mono);color:#9D9D9D;text-transform:uppercase;letter-spacing:.04em;}
+
+  /* === BADGES — solid pink notification dots/numbers (Figma rgb(237,39,207), radius 100) === */
+  /* outline=false: 4×4 solid pink dot */
+  .b-dot{width:4px;height:4px;border-radius:50%;background:#ED27CF;display:inline-block;}
+  /* outline=true: 6×6 white pill with 1px inner padding wrapping a 4×4 pink dot */
+  .b-dot-outline{width:6px;height:6px;border-radius:50%;background:#fff;display:inline-flex;align-items:center;justify-content:center;padding:1px;box-sizing:border-box;}
+  .b-dot-outline > i{width:4px;height:4px;border-radius:50%;background:#ED27CF;display:block;}
+  /* number: 18 tall pill, weight 700 white */
+  .b-num{min-width:18px;height:18px;border-radius:9999px;background:#ED27CF;color:#fff;font:700 12px/15px var(--font-sans);display:inline-flex;align-items:center;justify-content:center;padding:0 6px;}
+  .b-num.multi{font-size:10px;line-height:12px;padding:0 5px;}
+  .b-anchor{position:relative;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:#F5F6FA;color:#434343;font:600 14px/1 var(--font-sans);}
+  .b-anchor .b-num{position:absolute;top:-4px;right:-6px;}
+  .b-anchor .b-dot,.b-anchor .b-dot-outline{position:absolute;top:8px;right:10px;}
+
+  /* === CHIPS — full pill (radius 100), Figma sizes 36px tall, 13px label === */
+  .chip{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px;border-radius:9999px;font:700 13px/20px var(--font-sans);color:#3E4459;}
+  .chip-primary{background:#F4F5F9;}
+  .chip-secondary{background:#fff;border:1.5px solid #D8DCE5;font-weight:500;font-size:14px;}
+  .chip-selected{background:#FDE9FA;color:#ED27CF;border:1.5px solid #ED27CF;}
+  .chip-disabled{background:#F4F5F9;color:#BFC5D2;}
+  .chip .pt{width:6px;height:6px;border-radius:50%;background:#3E4459;}
+  .chip-selected .pt{background:#ED27CF;}
+  .chip .num{color:#ED27CF;font-weight:500;font-size:14px;}
+  .chip .x{width:14px;height:14px;display:inline-grid;place-items:center;color:#BFC5D2;font:400 14px/1 var(--font-sans);}
+</style></head>
+<body>
+<div class="grid">
+
+  <div class="card">
+    <h6>Badges · Dot</h6>
+    <div class="row">
+      <span class="lbl">solid</span>
+      <span class="b-anchor">A<span class="b-dot"></span></span>
+      <span class="b-anchor">B<span class="b-dot"></span></span>
+      <span class="b-dot"></span>
+    </div>
+    <div class="row">
+      <span class="lbl">outline</span>
+      <span class="b-anchor" style="background:#ED27CF;color:#fff;">C<span class="b-dot-outline"><i></i></span></span>
+      <span class="b-dot-outline"><i></i></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h6>Badges · Number</h6>
+    <div class="row">
+      <span class="lbl">single</span>
+      <span class="b-anchor">★<span class="b-num">9</span></span>
+      <span class="b-num">1</span>
+      <span class="b-num">9</span>
+    </div>
+    <div class="row">
+      <span class="lbl">multi</span>
+      <span class="b-anchor">✉<span class="b-num multi">99+</span></span>
+      <span class="b-num multi">12</span>
+      <span class="b-num multi">99+</span>
+    </div>
+  </div>
+
+  <div class="card" style="grid-column:1/-1;">
+    <h6>Chips</h6>
+    <div class="row">
+      <span class="lbl">primary</span>
+      <span class="chip chip-primary"><span class="pt"></span>텍스트<span class="num">0</span><span class="x">×</span></span>
+      <span class="chip chip-primary">전체</span>
+      <span class="chip chip-primary">진행중</span>
+    </div>
+    <div class="row">
+      <span class="lbl">secondary</span>
+      <span class="chip chip-secondary">텍스트</span>
+      <span class="chip chip-secondary">2024.10<span class="x">×</span></span>
+      <span class="chip chip-secondary">서울<span class="x">×</span></span>
+    </div>
+    <div class="row">
+      <span class="lbl">selected</span>
+      <span class="chip chip-selected"><span class="pt"></span>선택됨</span>
+      <span class="chip chip-selected">진행중</span>
+    </div>
+    <div class="row">
+      <span class="lbl">disabled</span>
+      <span class="chip chip-disabled">비활성</span>
+      <span class="chip chip-disabled">텍스트</span>
+    </div>
+  </div>
+
+</div>
+</body></html>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="13" viewBox="0 0 16 13" fill="none">
+  <path d="M 1 8 C 1.552 8 2 8.448 2 9 L 2 11 L 4 11 C 4.552 11 5 11.448 5 12 C 5 12.552 4.552 13 4 13 L 2 13 C 0.895 13 0 12.105 0 11 L 0 9 C 0 8.448 0.448 8 1 8 Z" fill="currentColor" fill-rule="nonzero"></path>
+  <path d="M 15 8 C 15.552 8 16 8.448 16 9 L 16 11 C 16 12.105 15.105 13 14 13 L 12 13 C 11.448 13 11 12.552 11 12 C 11 11.448 11.448 11 12 11 L 14 11 L 14 9 C 14 8.448 14.448 8 15 8 Z" fill="currentColor" fill-rule="nonzero"></path>
+  <path d="M 4 0 C 4.552 0 5 0.448 5 1 C 5 1.552 4.552 2 4 2 L 2 2 L 2 4 C 2 4.552 1.552 5 1 5 C 0.448 5 0 4.552 0 4 L 0 2 C 0 0.895 0.895 0 2 0 L 4 0 Z" fill="currentColor" fill-rule="nonzero"></path>
+  <path d="M 14 0 C 15.105 0 16 0.895 16 2 L 16 4 C 16 4.552 15.552 5 15 5 C 14.448 5 14 4.552 14 4 L 14 2 L 12 2 C 11.448 2 11 1.552 11 1 C 11 0.448 11.448 0 12 0 L 14 0 Z" fill="currentColor" fill-rule="nonzero"></path>
+  <path d="M 4 4.5 C 4 3.948 4.448 3.5 5 3.5 C 5.552 3.5 6 3.948 6 4.5 L 6 8.5 C 6 9.052 5.552 9.5 5 9.5 C 4.448 9.5 4 9.052 4 8.5 L 4 4.5 Z" fill="currentColor" fill-rule="nonzero"></path>
+  <path d="M 7 4.5 C 7 3.948 7.448 3.5 8 3.5 C 8.552 3.5 9 3.948 9 4.5 L 9 8.5 C 9 9.052 8.552 9.5 8 9.5 C 7.448 9.5 7 9.052 7 8.5 L 7 4.5 Z" fill="currentColor" fill-rule="nonzero"></path>
+  <path d="M 10 4.5 C 10 3.948 10.448 3.5 11 3.5 C 11.552 3.5 12 3.948 12 4.5 L 12 8.5 C 12 9.052 11.552 9.5 11 9.5 C 10.448 9.5 10 9.052 10 8.5 L 10 4.5 Z" fill="currentColor" fill-rule="nonzero"></path>
+</svg>

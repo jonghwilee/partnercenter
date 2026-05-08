@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Colors — Status</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  body{margin:0;padding:24px;background:#fff;}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  .pair{display:flex;flex-direction:column;gap:6px;}
+  .sw{height:64px;border-radius:8px;display:flex;align-items:flex-end;padding:8px;font:500 12px/1.2 var(--font-sans);color:#fff;}
+  .sw.subtle{height:40px;color:#000;border:1px solid rgba(28,28,67,.06);}
+  .sw small{display:block;opacity:.8;font-weight:400;}
+</style></head>
+<body>
+  <div class="grid">
+    <div class="pair"><div class="sw" style="background:#00A862">success<small>00A862</small></div><div class="sw subtle" style="background:#DDF6EA">subtle<small>DDF6EA</small></div></div>
+    <div class="pair"><div class="sw" style="background:#2142FF">info<small>2142FF</small></div><div class="sw subtle" style="background:#E5E9FF">subtle<small>E5E9FF</small></div></div>
+    <div class="pair"><div class="sw" style="background:#FF8A00">warning<small>FF8A00</small></div><div class="sw subtle" style="background:#FFEFD9">subtle<small>FFEFD9</small></div></div>
+    <div class="pair"><div class="sw" style="background:#FF0037">error<small>FF0037</small></div><div class="sw subtle" style="background:#FFE5EA">subtle<small>FFE5EA</small></div></div>
+  </div>
+</body></html>

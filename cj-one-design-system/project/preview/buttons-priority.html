@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Buttons — Priority</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>body{margin:0;padding:20px;background:#fff;font-family:var(--font-sans);}
+  .row{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap;}
+  .lbl{width:90px;font:500 12px/1 var(--font-mono);color:#676E82;}
+  .b{height:40px;border-radius:8px;border:0;padding:0 16px;font:700 15px/26px var(--font-sans);cursor:pointer;display:inline-flex;align-items:center;}
+  .primary{background:#ED27CF;color:#fff;}
+  .primary:hover{background:#C71BAF;}
+  .secondary{background:#1E192A;color:#fff;}
+  .secondary:hover{background:#000;}
+  .tertiary{background:#EDF0F5;color:#262626;}
+  .tertiary:hover{background:#D8DCE5;}
+  .quaternary{background:transparent;color:#262626;border:1px solid #D8DCE5;}
+  .quaternary:hover{background:#F5F6FA;}
+  .warning{background:#FF0037;color:#fff;}
+  .disabled{background:#EDF0F5;color:#BFC5D2;cursor:not-allowed;}
+</style></head>
+<body>
+  <div class="row"><span class="lbl">primary</span><button class="b primary">버튼 라벨</button><button class="b primary" style="background:#C71BAF">hover</button><button class="b disabled">disabled</button></div>
+  <div class="row"><span class="lbl">secondary</span><button class="b secondary">버튼 라벨</button></div>
+  <div class="row"><span class="lbl">tertiary</span><button class="b tertiary">버튼 라벨</button></div>
+  <div class="row"><span class="lbl">quaternary</span><button class="b quaternary">버튼 라벨</button></div>
+  <div class="row"><span class="lbl">warning</span><button class="b warning">삭제</button></div>
+</body></html>
