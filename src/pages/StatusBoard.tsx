@@ -24,6 +24,10 @@ const FIGMA_BASE =
   "https://www.figma.com/design/8UxCwhtN5D2EYaPevafhL0/CJ-ONE-%ED%8C%8C%ED%8A%B8%EB%84%88%EC%84%BC%ED%84%B0?node-id=";
 
 const F = {
+  // ① 기초 설계
+  GNB_SNB_GRID: "117-25832",      // (설계용 컴포넌트) > Site Grid, SNB, GNB
+  COMMON_COMPONENTS: "117-22999", // (설계용 컴포넌트) > 정산 공통 컴포넌트
+
   // ⑧ 대시보드
   DASHBOARD: "55-1571",           // 메뉴 구조 > Frame 133 "대시보드"
   CUSTOMER_ANALYTICS: "55-1577",  // 메뉴 구조 > Frame 134 "고객 분석"
@@ -66,6 +70,58 @@ const F = {
 const figmaUrl = (nodeId: string) => `${FIGMA_BASE}${nodeId}`;
 
 const categories: Category[] = [
+  {
+    name: "기초 설계",
+    icon: "🎨",
+    wbs: "①",
+    features: [
+      {
+        name: "디자인 시스템",
+        file: "cj-one-design-system/",
+        route: "",
+        status: "planned",
+        priority: "P0",
+        description: "컬러·타이포그래피·스페이싱·아이콘 토큰 정의",
+        figmaNodeId: F.GNB_SNB_GRID,
+      },
+      {
+        name: "사이트 그리드",
+        file: "—",
+        route: "",
+        status: "planned",
+        priority: "P0",
+        description: "컬럼·거터·마진 레이아웃 그리드 스펙",
+        figmaNodeId: F.GNB_SNB_GRID,
+      },
+      {
+        name: "GNB",
+        file: "layout/Header.tsx",
+        route: "/status-board",
+        status: "done",
+        priority: "P0",
+        description: "글로벌 네비게이션 바 (상단 헤더)",
+        figmaNodeId: F.GNB_SNB_GRID,
+      },
+      {
+        name: "SNB",
+        file: "layout/Sidebar.tsx",
+        route: "/status-board",
+        status: "done",
+        priority: "P0",
+        description: "사이드 네비게이션 바 (좌측 사이드바)",
+        figmaNodeId: F.GNB_SNB_GRID,
+      },
+      {
+        name: "공통 컴포넌트",
+        file: "components/ui/",
+        route: "",
+        status: "planned",
+        priority: "P0",
+        description: "버튼·인풋·테이블·모달 등 UI 컴포넌트 라이브러리",
+        figmaNodeId: F.COMMON_COMPONENTS,
+      },
+    ],
+  },
   {
     name: "대시보드",
     icon: "📊",

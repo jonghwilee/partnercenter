@@ -18,6 +18,14 @@ const menuGroups: MenuGroup[] = [
     items: [{ label: "현황판", to: "/status-board" }],
   },
   {
+    group: "기초 설계",
+    wbs: "①",
+    items: [
+      { label: "GNB", to: "/status-board" },
+      { label: "SNB", to: "/status-board" },
+    ],
+  },
+  {
     group: "대시보드",
     wbs: "⑧",
     items: [
