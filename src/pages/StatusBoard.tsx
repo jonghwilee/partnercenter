@@ -10,6 +10,7 @@ type Feature = {
   status: FeatureStatus;
   priority: Priority;
   description: string;
+  figmaNodeId: string;
 };
 
 type Category = {
@@ -17,6 +18,21 @@ type Category = {
   icon: string;
   features: Feature[];
 };
+
+const FIGMA_BASE =
+  "https://www.figma.com/design/8UxCwhtN5D2EYaPevafhL0/CJ-ONE-%ED%8C%8C%ED%8A%B8%EB%84%88%EC%84%BC%ED%84%B0?node-id=";
+
+// Figma node-id 상수
+const F = {
+  MENU: "1512-54265",             // 🔹멤버십 센터 > 메뉴 구조
+  SETTLEMENT_FLOW: "665-20737",   // 🔹Flow > 포인트 정산 흐름도
+  SETTLEMENT_PROCESS: "665-20893",// 🔹Flow > 기준정보 등록, 정산 프로세스
+  PERMISSION_1: "1464-100102",    // 🔹멤버십 센터 > 권한 관리 (목록/요청)
+  PERMISSION_2: "1464-100201",    // 🔹멤버십 센터 > 권한 관리 (상세)
+  ADMIN: "1427-73370",            // 권한 관리 페이지 > 어드민 관리
+};
+
+const figmaUrl = (nodeId: string) => `${FIGMA_BASE}${nodeId}`;
 
 const categories: Category[] = [
   {
@@ -30,6 +46,7 @@ const categories: Category[] = [
         status: "planned",
         priority: "P0",
         description: "정산 현황 요약, 주요 지표 KPI 카드",
+        figmaNodeId: F.MENU,
       },
     ],
   },
@@ -44,6 +61,7 @@ const categories: Category[] = [
         status: "planned",
         priority: "P0",
         description: "월별 정산 합계 요약",
+        figmaNodeId: F.SETTLEMENT_FLOW,
       },
       {
         name: "정산 상세",
@@ -52,6 +70,7 @@ const categories: Category[] = [
         status: "done",
         priority: "P0",
         description: "일자별·매장별 적립/사용 정산 내역",
+        figmaNodeId: F.SETTLEMENT_FLOW,
       },
       {
         name: "포인트 전환",
@@ -60,6 +79,7 @@ const categories: Category[] = [
         status: "done",
         priority: "P0",
         description: "포인트 유입·유출 전환 내역 (요약/일자별/건별)",
+        figmaNodeId: F.SETTLEMENT_FLOW,
       },
       {
         name: "기프트포인트 정산",
@@ -68,6 +88,7 @@ const categories: Category[] = [
         status: "done",
         priority: "P0",
         description: "기프트포인트 발행·등록·소멸 정산 (요약/건별)",
+        figmaNodeId: F.SETTLEMENT_FLOW,
       },
       {
         name: "기프트포인트 취소요청",
@@ -76,6 +97,7 @@ const categories: Category[] = [
         status: "done",
         priority: "P0",
         description: "기프트포인트 취소 요청 내역 조회",
+        figmaNodeId: F.SETTLEMENT_FLOW,
       },
       {
         name: "제휴카드 특별적립",
@@ -84,6 +106,7 @@ const categories: Category[] = [
         status: "done",
         priority: "P1",
         description: "제휴카드 특별적립 정산 내역",
+        figmaNodeId: F.SETTLEMENT_FLOW,
       },
       {
         name: "이중적립 정산",
@@ -92,6 +115,7 @@ const categories: Category[] = [
         status: "planned",
         priority: "P1",
         description: "이중적립 정산 내역 조회",
+        figmaNodeId: F.SETTLEMENT_FLOW,
       },
       {
         name: "직접사용 포인트 정산",
@@ -100,6 +124,7 @@ const categories: Category[] = [
         status: "planned",
         priority: "P1",
         description: "직접사용 포인트 정산 상세",
+        figmaNodeId: F.SETTLEMENT_FLOW,
       },
     ],
   },
@@ -114,6 +139,7 @@ const categories: Category[] = [
         status: "done",
         priority: "P1",
         description: "현대카드 이용 건별 내역 조회",
+        figmaNodeId: F.SETTLEMENT_FLOW,
       },
       {
         name: "현대카드 정산 상세",
@@ -122,6 +148,7 @@ const categories: Category[] = [
         status: "done",
         priority: "P1",
         description: "현대카드 월별 정산 상세",
+        figmaNodeId: F.SETTLEMENT_FLOW,
       },
     ],
   },
@@ -136,6 +163,7 @@ const categories: Category[] = [
         status: "planned",
         priority: "P1",
         description: "포인트 적립·사용 건별 내역",
+        figmaNodeId: F.SETTLEMENT_PROCESS,
       },
       {
         name: "정산 원장",
@@ -144,6 +172,7 @@ const categories: Category[] = [
         status: "planned",
         priority: "P1",
         description: "정산 마스터 원장 조회",
+        figmaNodeId: F.SETTLEMENT_PROCESS,
       },
       {
         name: "이용기준 회계",
@@ -152,6 +181,7 @@ const categories: Category[] = [
         status: "planned",
         priority: "P1",
         description: "이용 기준 회계 정산 내역",
+        figmaNodeId: F.SETTLEMENT_PROCESS,
       },
     ],
   },
@@ -166,6 +196,7 @@ const categories: Category[] = [
         status: "planned",
         priority: "P1",
         description: "제휴사별 고객 적립·이용 분석 (제휴사 본사 담당자 전용)",
+        figmaNodeId: F.MENU,
       },
     ],
   },
@@ -180,6 +211,7 @@ const categories: Category[] = [
         status: "planned",
         priority: "P0",
         description: "파트너센터 공지사항 목록·상세",
+        figmaNodeId: F.MENU,
       },
       {
         name: "FAQ",
@@ -188,6 +220,7 @@ const categories: Category[] = [
         status: "planned",
         priority: "P1",
         description: "자주 묻는 질문 목록",
+        figmaNodeId: F.MENU,
       },
       {
         name: "1:1 문의",
@@ -196,6 +229,7 @@ const categories: Category[] = [
         status: "done",
         priority: "P0",
         description: "정산·수수료·포인트 등 유형별 1:1 문의 등록",
+        figmaNodeId: F.MENU,
       },
     ],
   },
@@ -210,6 +244,7 @@ const categories: Category[] = [
         status: "planned",
         priority: "P0",
         description: "사용자·역할·스코프 권한 관리",
+        figmaNodeId: F.PERMISSION_1,
       },
       {
         name: "권한 요청 관리",
@@ -218,6 +253,7 @@ const categories: Category[] = [
         status: "planned",
         priority: "P1",
         description: "권한 요청 승인·반려 처리",
+        figmaNodeId: F.PERMISSION_2,
       },
       {
         name: "어드민",
@@ -226,6 +262,7 @@ const categories: Category[] = [
         status: "planned",
         priority: "Later",
         description: "파트너센터 어드민 관리 화면",
+        figmaNodeId: F.ADMIN,
       },
     ],
   },
@@ -286,6 +323,18 @@ function PriorityBadge({ priority }: { priority: Priority }) {
     >
       Later
     </span>
+  );
+}
+
+function FigmaIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 38 57" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M19 28.5C19 25.9804 20.0009 23.5641 21.7825 21.7825C23.5641 20.0009 25.9804 19 28.5 19C31.0196 19 33.4359 20.0009 35.2175 21.7825C36.9991 23.5641 38 25.9804 38 28.5C38 31.0196 36.9991 33.4359 35.2175 35.2175C33.4359 36.9991 31.0196 38 28.5 38C25.9804 38 23.5641 36.9991 21.7825 35.2175C20.0009 33.4359 19 31.0196 19 28.5Z" fill="#1ABCFE"/>
+      <path d="M0 47.5C0 44.9804 1.00089 42.5641 2.78249 40.7825C4.56408 39.0009 6.98044 38 9.5 38H19V47.5C19 50.0196 17.9991 52.4359 16.2175 54.2175C14.4359 55.9991 12.0196 57 9.5 57C6.98044 57 4.56408 55.9991 2.78249 54.2175C1.00089 52.4359 0 50.0196 0 47.5Z" fill="#0ACF83"/>
+      <path d="M19 0V19H28.5C31.0196 19 33.4359 17.9991 35.2175 16.2175C36.9991 14.4359 38 12.0196 38 9.5C38 6.98044 36.9991 4.56408 35.2175 2.78249C33.4359 1.00089 31.0196 0 28.5 0H19Z" fill="#FF7262"/>
+      <path d="M0 9.5C0 12.0196 1.00089 14.4359 2.78249 16.2175C4.56408 17.9991 6.98044 19 9.5 19H19V0H9.5C6.98044 0 4.56408 1.00089 2.78249 2.78249C1.00089 4.56408 0 6.98044 0 9.5Z" fill="#F24E1E"/>
+      <path d="M0 28.5C0 31.0196 1.00089 33.4359 2.78249 35.2175C4.56408 36.9991 6.98044 38 9.5 38H19V19H9.5C6.98044 19 4.56408 20.0009 2.78249 21.7825C1.00089 23.5641 0 25.9804 0 28.5Z" fill="#A259FF"/>
+    </svg>
   );
 }
 
@@ -403,13 +452,14 @@ export default function StatusBoard() {
               <table className="w-full" style={{ backgroundColor: "#FFFFFF" }}>
                 <thead>
                   <tr style={{ borderBottom: "1px solid #EDF0F5" }}>
-                    <th className="px-5 py-2.5 text-left text-xs font-medium w-8" style={{ color: "#9D9D9D" }}>#</th>
+                    <th className="px-4 py-2.5 text-left text-xs font-medium w-6" style={{ color: "#9D9D9D" }}>#</th>
                     <th className="px-3 py-2.5 text-left text-xs font-medium" style={{ color: "#9D9D9D" }}>기능명</th>
                     <th className="px-3 py-2.5 text-left text-xs font-medium" style={{ color: "#9D9D9D" }}>파일</th>
-                    <th className="px-3 py-2.5 text-left text-xs font-medium w-24" style={{ color: "#9D9D9D" }}>설명</th>
+                    <th className="px-3 py-2.5 text-left text-xs font-medium" style={{ color: "#9D9D9D" }}>설명</th>
                     <th className="px-3 py-2.5 text-left text-xs font-medium w-20" style={{ color: "#9D9D9D" }}>상태</th>
-                    <th className="px-3 py-2.5 text-left text-xs font-medium w-14" style={{ color: "#9D9D9D" }}>우선순위</th>
-                    <th className="px-5 py-2.5 text-right text-xs font-medium w-20" style={{ color: "#9D9D9D" }}>바로가기</th>
+                    <th className="px-3 py-2.5 text-left text-xs font-medium w-12" style={{ color: "#9D9D9D" }}>우선순위</th>
+                    <th className="px-3 py-2.5 text-center text-xs font-medium w-16" style={{ color: "#9D9D9D" }}>기획서</th>
+                    <th className="px-4 py-2.5 text-right text-xs font-medium w-20" style={{ color: "#9D9D9D" }}>바로가기</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -420,7 +470,7 @@ export default function StatusBoard() {
                         borderBottom: idx < cat.features.length - 1 ? "1px solid #F5F6FA" : "none",
                       }}
                     >
-                      <td className="px-5 py-3 text-xs" style={{ color: "#BFC5D2" }}>
+                      <td className="px-4 py-3 text-xs" style={{ color: "#BFC5D2" }}>
                         {idx + 1}
                       </td>
                       <td className="px-3 py-3">
@@ -451,7 +501,18 @@ export default function StatusBoard() {
                       <td className="px-3 py-3">
                         <PriorityBadge priority={feature.priority} />
                       </td>
-                      <td className="px-5 py-3 text-right">
+                      <td className="px-3 py-3 text-center">
+                        <a
+                          href={figmaUrl(feature.figmaNodeId)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center justify-center w-7 h-7 rounded-lg transition-colors hover:bg-[#F5F6FA]"
+                          title={`Figma 기획서 열기`}
+                        >
+                          <FigmaIcon />
+                        </a>
+                      </td>
+                      <td className="px-4 py-3 text-right">
                         {feature.status === "done" ? (
                           <Link
                             to={feature.route}
