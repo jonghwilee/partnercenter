@@ -729,6 +729,13 @@ function PriorityBars({ priority }: { priority: SpecPriority }) {
 
 /* ─────────────────── Spec Panel (right slide-in) ─────────────── */
 
+type CommentItem = {
+  id: number;
+  text: string;
+  time: string;
+  resolved: boolean;
+};
+
 function SpecPanel({
   feature,
   onClose,
@@ -737,6 +744,38 @@ function SpecPanel({
   onClose: () => void;
 }) {
   const spec = feature.spec!;
+  const [commentInput, setCommentInput] = useState("");
+  const [comments, setComments] = useState<CommentItem[]>([]);
+  const [showResolved, setShowResolved] = useState(false);
+
+  const handleAddComment = () => {
+    const trimmed = commentInput.trim();
+    if (!trimmed) return;
+    const now = new Date();
+    const time = now.toLocaleString("ko-KR", {
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    setComments((prev) => [
+      ...prev,
+      { id: Date.now(), text: trimmed, time, resolved: false },
+    ]);
+    setCommentInput("");
+  };
+
+  const handleResolve = (id: number) => {
+    setComments((prev) =>
+      prev.map((c) => (c.id === id ? { ...c, resolved: true } : c))
+    );
+  };
+
+  const resolvedCount = comments.filter((c) => c.resolved).length;
+  const visibleComments = showResolved
+    ? comments
+    : comments.filter((c) => !c.resolved);
+
   return (
     <>
       {/* Backdrop */}
@@ -873,31 +912,111 @@ function SpecPanel({
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-sm font-semibold" style={{ color: "#000000" }}>
                 코멘트
+                {comments.length > 0 && (
+                  <span className="ml-1.5 text-xs font-normal" style={{ color: "#9D9D9D" }}>
+                    ({comments.length})
+                  </span>
+                )}
               </h3>
-              <button className="text-xs" style={{ color: "#9D9D9D" }}>
-                해결된 코멘트 보기
-              </button>
+              {resolvedCount > 0 && (
+                <button
+                  className="text-xs"
+                  style={{ color: "#9D9D9D" }}
+                  onClick={() => setShowResolved((v) => !v)}
+                >
+                  {showResolved
+                    ? "해결된 코멘트 숨기기"
+                    : `해결된 코멘트 보기 (${resolvedCount})`}
+                </button>
+              )}
             </div>
+
+            {/* Comment list */}
+            {visibleComments.length > 0 && (
+              <div className="space-y-3 mb-4">
+                {visibleComments.map((comment) => (
+                  <div key={comment.id} className="flex gap-2.5">
+                    {/* Avatar */}
+                    <div
+                      className="w-7 h-7 rounded-full shrink-0 flex items-center justify-center text-xs font-bold"
+                      style={{ backgroundColor: "#E5E9FF", color: "#2142FF" }}
+                    >
+                      나
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <span className="text-xs font-semibold" style={{ color: "#434343" }}>
+                          나
+                        </span>
+                        <span className="text-xs" style={{ color: "#BFC5D2" }}>
+                          {comment.time}
+                        </span>
+                        {comment.resolved && (
+                          <span
+                            className="text-xs px-1.5 py-0.5 rounded-full"
+                            style={{ backgroundColor: "#E6F7EF", color: "#00A862" }}
+                          >
+                            해결됨
+                          </span>
+                        )}
+                      </div>
+                      <p
+                        className="text-sm leading-relaxed"
+                        style={{ color: comment.resolved ? "#BFC5D2" : "#434343" }}
+                      >
+                        {comment.text}
+                      </p>
+                    </div>
+                    {!comment.resolved && (
+                      <button
+                        onClick={() => handleResolve(comment.id)}
+                        title="해결로 표시"
+                        className="shrink-0 w-6 h-6 flex items-center justify-center rounded-md text-xs hover:bg-[#F5F6FA] transition-colors"
+                        style={{ color: "#9D9D9D" }}
+                      >
+                        ✓
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Input row */}
             <div
-              className="flex items-center gap-2 rounded-xl px-3 py-2.5"
-              style={{ border: "1px solid #EDF0F5" }}
+              className="flex items-center gap-2 rounded-xl px-3 py-2.5 transition-colors"
+              style={{
+                border: `1px solid ${commentInput ? "#2142FF" : "#EDF0F5"}`,
+              }}
             >
               <input
                 type="text"
                 placeholder="코멘트를 입력하세요..."
+                value={commentInput}
+                onChange={(e) => setCommentInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
                 className="flex-1 text-sm outline-none bg-transparent"
                 style={{ color: "#434343" }}
               />
               <button
-                className="px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0"
-                style={{ backgroundColor: "#EDF0F5", color: "#676E82" }}
+                onClick={handleAddComment}
+                disabled={!commentInput.trim()}
+                className="px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-colors"
+                style={{
+                  backgroundColor: commentInput.trim() ? "#1E192A" : "#EDF0F5",
+                  color: commentInput.trim() ? "#FFFFFF" : "#676E82",
+                  cursor: commentInput.trim() ? "pointer" : "default",
+                }}
               >
                 등록
               </button>
             </div>
-            <p className="text-xs text-center mt-5" style={{ color: "#BFC5D2" }}>
-              코멘트가 없습니다.
-            </p>
+
+            {comments.length === 0 && (
+              <p className="text-xs text-center mt-5" style={{ color: "#BFC5D2" }}>
+                코멘트가 없습니다.
+              </p>
+            )}
           </div>
 
           <div className="h-6" />
