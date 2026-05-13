@@ -503,7 +503,7 @@ const categories: Category[] = [
         file: "GiftPointManagement.tsx",
         route: "/settlement/gift-point",
         status: "done",
-        priority: "P0",
+        priority: "Later",
         description: "기프트포인트 발행·등록·소멸 정산 (요약/건별)",
         figmaNodeId: F.GIFT_POINT,
         spec: {
@@ -536,7 +536,7 @@ const categories: Category[] = [
         file: "GiftPointCancelRequest.tsx",
         route: "/settlement/gift-point-cancel",
         status: "done",
-        priority: "P0",
+        priority: "Later",
         description: "기프트포인트 취소 요청 내역 조회",
         figmaNodeId: F.GIFT_POINT_CANCEL,
         spec: {
@@ -1399,17 +1399,26 @@ function MenuScopeSection() {
           >
             메뉴 ({totalMenus}개)
           </div>
-          {AFFILIATE_TYPES.map((type) => (
-            <div
-              key={type}
-              className="px-2 py-2.5 text-xs font-semibold text-center leading-tight"
-              style={{ color: "#FFFFFF", borderLeft: "1px solid rgba(255,255,255,0.1)" }}
-            >
-              {type}
-              <br />
-              <span className="font-normal opacity-70">제휴사</span>
-            </div>
-          ))}
+          {AFFILIATE_TYPES.map((type) => {
+            const isDeferred = type === "기프트바우처" || type === "포인트바우처";
+            return (
+              <div
+                key={type}
+                className="px-2 py-2.5 text-xs font-semibold text-center leading-tight"
+                style={{
+                  color: isDeferred ? "rgba(255,255,255,0.45)" : "#FFFFFF",
+                  borderLeft: "1px solid rgba(255,255,255,0.1)",
+                  backgroundColor: isDeferred ? "rgba(0,0,0,0.15)" : undefined,
+                }}
+              >
+                {type}
+                <br />
+                <span className="font-normal" style={{ opacity: isDeferred ? 0.5 : 0.7 }}>
+                  {isDeferred ? "후순위" : "제휴사"}
+                </span>
+              </div>
+            );
+          })}
         </div>
 
         {/* 그룹별 행 */}
