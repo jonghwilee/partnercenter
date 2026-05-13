@@ -99,7 +99,7 @@ export default function SettlementDetail() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>거래일자(월)</TableHead>
+                <TableHead>일자</TableHead>
                 <TableHead>브랜드</TableHead>
                 {showStoreInTable && <TableHead>매장</TableHead>}
                 <TableHead>거래유형</TableHead>
