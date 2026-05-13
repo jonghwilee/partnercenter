@@ -1131,6 +1131,340 @@ function DiscussionTypeBadge({ type }: { type: DiscussionType }) {
   );
 }
 
+/* ─────────────── Menu Scope by Affiliate Type ─────────────────── */
+
+type AffiliateType =
+  | "구매적립"
+  | "포인트전환"
+  | "바로사용"
+  | "특별적립"
+  | "기프트바우처"
+  | "포인트바우처";
+
+type MenuAccess = "○" | "△" | "—";
+
+type MenuScopeItem = {
+  name: string;
+  access: Record<AffiliateType, MenuAccess>;
+  note?: string;
+};
+
+type MenuScopeGroup = {
+  category: string;
+  icon: string;
+  menus: MenuScopeItem[];
+};
+
+const AFFILIATE_TYPES: AffiliateType[] = [
+  "구매적립",
+  "포인트전환",
+  "바로사용",
+  "특별적립",
+  "기프트바우처",
+  "포인트바우처",
+];
+
+const ALL = (v: MenuAccess): Record<AffiliateType, MenuAccess> =>
+  Object.fromEntries(AFFILIATE_TYPES.map((t) => [t, v])) as Record<AffiliateType, MenuAccess>;
+
+const ac = (
+  구매적립: MenuAccess,
+  포인트전환: MenuAccess,
+  바로사용: MenuAccess,
+  특별적립: MenuAccess,
+  기프트바우처: MenuAccess,
+  포인트바우처: MenuAccess
+): Record<AffiliateType, MenuAccess> => ({
+  구매적립,
+  포인트전환,
+  바로사용,
+  특별적립,
+  기프트바우처,
+  포인트바우처,
+});
+
+const menuScopeGroups: MenuScopeGroup[] = [
+  {
+    category: "공통",
+    icon: "🏠",
+    menus: [
+      { name: "홈 화면",  access: ALL("○") },
+      { name: "공지사항", access: ALL("○") },
+      { name: "FAQ",     access: ALL("○") },
+      { name: "1:1 문의", access: ALL("○") },
+      { name: "내 정보",  access: ALL("○") },
+    ],
+  },
+  {
+    category: "대시보드",
+    icon: "📊",
+    menus: [
+      {
+        name: "대시보드",
+        access: ac("○", "—", "—", "○", "—", "—"),
+        note: "구매·거래 실적 기반 집계. 본사 담당자 한정",
+      },
+      {
+        name: "고객 분석",
+        access: ac("○", "—", "—", "—", "—", "—"),
+        note: "구매적립 제휴사 우선 오픈. 본사 담당자 한정",
+      },
+    ],
+  },
+  {
+    category: "정산 관리",
+    icon: "💳",
+    menus: [
+      {
+        name: "정산 요약",
+        access: ac("○", "○", "○", "○", "—", "—"),
+        note: "계약 유형별 합산 정산 요약",
+      },
+      {
+        name: "정산 상세",
+        access: ac("○", "—", "—", "—", "—", "—"),
+        note: "적립·사용·취소 일자별 건별 내역",
+      },
+      {
+        name: "포인트 내역",
+        access: ac("○", "○", "○", "—", "—", "—"),
+      },
+      {
+        name: "정산 원장",
+        access: ac("○", "—", "○", "—", "—", "—"),
+      },
+      {
+        name: "이중적립 정산",
+        access: ac("—", "—", "—", "○", "—", "—"),
+        note: "제휴카드 이중적립 발생 제휴사",
+      },
+      {
+        name: "제휴카드 특별적립",
+        access: ac("—", "—", "—", "○", "—", "—"),
+        note: "특별적립 계약 제휴사",
+      },
+      {
+        name: "포인트 전환",
+        access: ac("—", "○", "—", "—", "—", "—"),
+        note: "포인트 교환·전환 계약 제휴사",
+      },
+      {
+        name: "직접사용 포인트 정산",
+        access: ac("—", "—", "○", "—", "—", "—"),
+        note: "POS 직접 차감 방식 제휴사",
+      },
+    ],
+  },
+  {
+    category: "올리브영 현대카드",
+    icon: "🏦",
+    menus: [
+      {
+        name: "현대카드 이용내역",
+        access: ac("—", "—", "—", "△", "—", "—"),
+        note: "올리브영 현대카드 제휴사 전용",
+      },
+      {
+        name: "현대카드 정산 상세",
+        access: ac("—", "—", "—", "△", "—", "—"),
+        note: "올리브영 현대카드 제휴사 전용",
+      },
+    ],
+  },
+  {
+    category: "포인트 관리",
+    icon: "🎁",
+    menus: [
+      {
+        name: "기프트포인트 정산",
+        access: ac("—", "—", "—", "—", "○", "—"),
+      },
+      {
+        name: "기프트포인트 취소요청",
+        access: ac("—", "—", "—", "—", "○", "—"),
+      },
+    ],
+  },
+  {
+    category: "회계 관리",
+    icon: "📒",
+    menus: [
+      {
+        name: "이용기준 회계",
+        access: ac("○", "—", "○", "○", "—", "—"),
+      },
+    ],
+  },
+  {
+    category: "포인트바우처",
+    icon: "🎟️",
+    menus: [
+      {
+        name: "포인트바우처 (추후 구현)",
+        access: ac("—", "—", "—", "—", "—", "○"),
+        note: "계획 중, 출시 일정 미확정",
+      },
+    ],
+  },
+];
+
+const ACCESS_STYLE: Record<MenuAccess, { bg: string; color: string; fw: string }> = {
+  "○": { bg: "#E8F5E9", color: "#1B5E20", fw: "600" },
+  "△": { bg: "#FFF8E1", color: "#E65100", fw: "600" },
+  "—": { bg: "#FAFAFA", color: "#BDBDBD", fw: "400" },
+};
+
+function MenuScopeSection() {
+  const totalMenus = menuScopeGroups.reduce((s, g) => s + g.menus.length, 0);
+
+  return (
+    <div>
+      {/* 헤더 */}
+      <div className="flex items-start justify-between mb-3">
+        <div>
+          <h2 className="text-sm font-semibold" style={{ color: "#000000" }}>
+            제휴계약별 메뉴 접근 범위
+          </h2>
+          <p className="text-xs mt-0.5" style={{ color: "#9D9D9D" }}>
+            단일 제휴사가 복수 계약 유형을 보유한 경우 해당 유형의 메뉴를 합산 적용합니다.
+          </p>
+        </div>
+        <div className="flex items-center gap-3 text-xs shrink-0 mt-0.5">
+          {(["○", "△", "—"] as MenuAccess[]).map((sym) => {
+            const s = ACCESS_STYLE[sym];
+            return (
+              <span key={sym} className="flex items-center gap-1">
+                <span
+                  className="w-5 h-5 flex items-center justify-center rounded text-xs font-semibold"
+                  style={{ backgroundColor: s.bg, color: s.color }}
+                >
+                  {sym}
+                </span>
+                <span style={{ color: "#676E82" }}>
+                  {sym === "○" ? "조회 가능" : sym === "△" ? "조건부" : "해당 없음"}
+                </span>
+              </span>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 테이블 */}
+      <div
+        className="rounded-xl overflow-hidden"
+        style={{ border: "1px solid #EDF0F5" }}
+      >
+        {/* 컬럼 헤더 */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "180px repeat(6, 1fr)",
+            backgroundColor: "#1F3864",
+            borderBottom: "1px solid #EDF0F5",
+          }}
+        >
+          <div
+            className="px-4 py-2.5 text-xs font-semibold"
+            style={{ color: "#FFFFFF" }}
+          >
+            메뉴 ({totalMenus}개)
+          </div>
+          {AFFILIATE_TYPES.map((type) => (
+            <div
+              key={type}
+              className="px-2 py-2.5 text-xs font-semibold text-center leading-tight"
+              style={{ color: "#FFFFFF", borderLeft: "1px solid rgba(255,255,255,0.1)" }}
+            >
+              {type}
+              <br />
+              <span className="font-normal opacity-70">제휴사</span>
+            </div>
+          ))}
+        </div>
+
+        {/* 그룹별 행 */}
+        {menuScopeGroups.map((group, gi) => (
+          <div key={group.category}>
+            {/* 카테고리 행 */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "180px repeat(6, 1fr)",
+                backgroundColor: "#F5F6FA",
+                borderBottom: "1px solid #EDF0F5",
+              }}
+            >
+              <div
+                className="px-4 py-2 text-xs font-semibold col-span-7"
+                style={{ color: "#434343" }}
+              >
+                {group.icon} {group.category}
+              </div>
+            </div>
+
+            {/* 메뉴 행 */}
+            {group.menus.map((menu, mi) => (
+              <div
+                key={menu.name}
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "180px repeat(6, 1fr)",
+                  borderBottom:
+                    gi < menuScopeGroups.length - 1 || mi < group.menus.length - 1
+                      ? "1px solid #F5F6FA"
+                      : "none",
+                  backgroundColor: "#FFFFFF",
+                }}
+              >
+                {/* 메뉴명 */}
+                <div className="px-4 py-2.5" style={{ borderRight: "1px solid #F5F6FA" }}>
+                  <p className="text-xs" style={{ color: "#000000" }}>
+                    {menu.name}
+                  </p>
+                  {menu.note && (
+                    <p className="text-xs mt-0.5" style={{ color: "#9D9D9D" }}>
+                      {menu.note}
+                    </p>
+                  )}
+                </div>
+
+                {/* 접근 여부 셀 */}
+                {AFFILIATE_TYPES.map((type) => {
+                  const access = menu.access[type];
+                  const s = ACCESS_STYLE[access];
+                  return (
+                    <div
+                      key={type}
+                      className="flex items-center justify-center py-2.5"
+                      style={{
+                        borderLeft: "1px solid #F5F6FA",
+                        backgroundColor: access === "—" ? "#FAFAFA" : s.bg,
+                      }}
+                    >
+                      <span
+                        className="text-sm"
+                        style={{ color: s.color, fontWeight: s.fw }}
+                      >
+                        {access}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+
+      {/* 주석 */}
+      <p className="text-xs mt-2 px-1" style={{ color: "#BFC5D2" }}>
+        △ 조건부: 세부 계약 내용 또는 특정 제휴사 한정 적용 &nbsp;|&nbsp;
+        시스템 관리 메뉴(사용자·권한·접속 조회 등)는 파트너센터 어드민 화면에서 관리
+      </p>
+    </div>
+  );
+}
+
 function DiscussionLogSection() {
   const [newContent, setNewContent] = useState("");
   const [newType, setNewType] = useState<DiscussionType>("논의 필요");
@@ -1601,6 +1935,9 @@ export default function StatusBoard() {
           ))}
         </div>
       </div>
+
+      {/* 제휴계약별 메뉴 접근 범위 */}
+      <MenuScopeSection />
 
       {/* 논의 일지 */}
       <DiscussionLogSection />
