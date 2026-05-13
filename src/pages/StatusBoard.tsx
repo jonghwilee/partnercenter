@@ -1,7 +1,28 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+
+/* ───────────────────────────── Types ───────────────────────────── */
 
 type FeatureStatus = "done" | "planned";
 type Priority = "P0" | "P1" | "Later";
+type SpecStatus = "시작전" | "진행중" | "완료";
+type SpecPriority = 1 | 2 | 3; // 1=높음 2=중간 3=낮음
+
+type SubFeature = {
+  no: number;
+  id: string;
+  title: string;
+  description: string;
+};
+
+type FeatureSpec = {
+  id: string;
+  status: SpecStatus;
+  priority: SpecPriority;
+  userRoles: string[];
+  summary: string;
+  subFeatures: SubFeature[];
+};
 
 type Feature = {
   name: string;
@@ -11,6 +32,7 @@ type Feature = {
   priority: Priority;
   description: string;
   figmaNodeId: string;
+  spec?: FeatureSpec;
 };
 
 type Category = {
@@ -20,55 +42,59 @@ type Category = {
   features: Feature[];
 };
 
+/* ───────────────────────────── Figma ───────────────────────────── */
+
 const FIGMA_BASE =
   "https://www.figma.com/design/8UxCwhtN5D2EYaPevafhL0/CJ-ONE-%ED%8C%8C%ED%8A%B8%EB%84%88%EC%84%BC%ED%84%B0?node-id=";
 
 const F = {
   // ① 기초 설계
-  GNB_SNB_GRID: "117-25832",      // (설계용 컴포넌트) > Site Grid, SNB, GNB
-  COMMON_COMPONENTS: "117-22999", // (설계용 컴포넌트) > 정산 공통 컴포넌트
+  GNB_SNB_GRID: "117-25832",
+  COMMON_COMPONENTS: "117-22999",
 
   // ⑧ 대시보드
-  DASHBOARD: "55-1571",           // 메뉴 구조 > Frame 133 "대시보드"
-  CUSTOMER_ANALYTICS: "55-1577",  // 메뉴 구조 > Frame 134 "고객 분석"
+  DASHBOARD: "55-1571",
+  CUSTOMER_ANALYTICS: "55-1577",
 
   // ① 공통 기반
-  HOME: "55-1637",                // 메뉴 구조 > Group 22 "파트너센터" (홈)
-  NOTICE: "55-1669",              // 메뉴 구조 > Frame 152 "공지사항 관리"
-  SUPPORT: "55-1901",             // 메뉴 구조 > Frame 155 "고객지원"
+  HOME: "55-1637",
+  NOTICE: "55-1669",
+  SUPPORT: "55-1901",
 
   // ② 로그인 · 접근 제어
-  LOGIN: "1922-39789",            // 로그인 페이지
-  MY_INFO: "55-1601",             // 메뉴 구조 > Frame 130 "MY"
+  LOGIN: "1922-39789",
+  MY_INFO: "55-1601",
 
   // ③ 시스템 관리
-  USER_MANAGEMENT: "55-1693",     // 메뉴 구조 > Frame 136 "사용자 관리"
-  AFFILIATE_MGMT: "55-1583",      // 메뉴 구조 > Frame 127 "매장 관리"
-  PERMISSION_MGMT: "55-1595",     // 메뉴 구조 > Frame 128 "권한 관리"
-  PERMISSION_REQUEST: "1464-100102", // 멤버십 센터 > 권한 관리 프레임
-  ACCESS_LOG: "55-1687",          // 메뉴 구조 > Frame 137 "권한 관리 (접속)"
-  ADMIN: "55-1641",               // 메뉴 구조 > Group 49 "파트너센터 어드민"
+  USER_MANAGEMENT: "55-1693",
+  AFFILIATE_MGMT: "55-1583",
+  PERMISSION_MGMT: "55-1595",
+  PERMISSION_REQUEST: "1464-100102",
+  ACCESS_LOG: "55-1687",
+  ADMIN: "55-1641",
 
   // ④ 포인트 관리
-  GIFT_POINT: "55-1505",          // 메뉴 구조 > Frame 124 "기프트 포인트"
-  GIFT_POINT_CANCEL: "55-1511",   // 메뉴 구조 > Frame 143 "기프트 포인트 (취소)"
+  GIFT_POINT: "55-1505",
+  GIFT_POINT_CANCEL: "55-1511",
 
   // ⑤ 정산 관리
-  SETTLEMENT: "55-1517",          // 메뉴 구조 > Frame 122 "포인트 정산"
-  SETTLEMENT_FLOW: "665-20737",   // Flow > 포인트 정산 흐름도
-  SETTLEMENT_PROCESS: "665-20893",// Flow > 기준정보 등록, 정산 프로세스
-  PARTNER_SETTLEMENT: "281-10028",// 메뉴 구조 > Group 28 "포인트 제휴 정산"
+  SETTLEMENT: "55-1517",
+  SETTLEMENT_FLOW: "665-20737",
+  SETTLEMENT_PROCESS: "665-20893",
+  PARTNER_SETTLEMENT: "281-10028",
 
   // ⑥ 올리브영 현대카드
-  HYUNDAI_CARD: "55-1559",        // 메뉴 구조 > Frame 126 "올리브영 현대카드"
-  HYUNDAI_CARD_DETAIL: "55-1565", // 메뉴 구조 > Frame 146 "올리브영 현대카드 상세"
+  HYUNDAI_CARD: "55-1559",
+  HYUNDAI_CARD_DETAIL: "55-1565",
 
   // ⑦ 회계 관리
-  ACCOUNTING: "55-1681",          // 메뉴 구조 > Frame 138 "포인트 회계 관리"
+  ACCOUNTING: "55-1681",
 };
 
 const figmaUrl = (nodeId: string) =>
   nodeId.startsWith("https://") ? nodeId : `${FIGMA_BASE}${nodeId}`;
+
+/* ───────────────────────────── Data ───────────────────────────── */
 
 const categories: Category[] = [
   {
@@ -102,6 +128,30 @@ const categories: Category[] = [
         priority: "P0",
         description: "글로벌 네비게이션 바 (상단 헤더)",
         figmaNodeId: F.GNB_SNB_GRID,
+        spec: {
+          id: "F-GNB001",
+          status: "완료",
+          priority: 1,
+          userRoles: ["전체"],
+          summary:
+            "파트너센터 상단에 고정되는 글로벌 네비게이션 바로, CJ ONE 로고·서비스명·버전 배지·계정 정보를 표시한다.",
+          subFeatures: [
+            {
+              no: 1,
+              id: "S-GNB01",
+              title: "로고 및 서비스명 표시",
+              description:
+                "CJ ONE 로고(그라디언트)와 '파트너센터' 서비스명을 좌측에 표시한다.",
+            },
+            {
+              no: 2,
+              id: "S-GNB02",
+              title: "버전 배지 및 계정 정보",
+              description:
+                "우측에 목업 버전(v0.2.9)과 테스트 계정 배지를 표시한다.",
+            },
+          ],
+        },
       },
       {
         name: "SNB",
@@ -111,6 +161,30 @@ const categories: Category[] = [
         priority: "P0",
         description: "사이드 네비게이션 바 (좌측 사이드바)",
         figmaNodeId: F.GNB_SNB_GRID,
+        spec: {
+          id: "F-SNB001",
+          status: "완료",
+          priority: 1,
+          userRoles: ["전체"],
+          summary:
+            "좌측에 고정되는 사이드 네비게이션 바로, WBS 카테고리별 메뉴 그룹과 NavLink 활성 하이라이트를 제공한다.",
+          subFeatures: [
+            {
+              no: 1,
+              id: "S-SNB01",
+              title: "카테고리별 메뉴 그룹",
+              description:
+                "WBS ①~⑧ 번호 배지와 함께 카테고리별로 메뉴 항목을 그룹화하여 표시한다.",
+            },
+            {
+              no: 2,
+              id: "S-SNB02",
+              title: "활성 메뉴 하이라이트",
+              description:
+                "현재 경로와 일치하는 메뉴 항목에 핑크(#ED27CF) 텍스트와 연핑크 배경을 적용한다.",
+            },
+          ],
+        },
       },
       {
         name: "공통 컴포넌트",
@@ -188,6 +262,30 @@ const categories: Category[] = [
         priority: "P0",
         description: "정산·수수료·포인트 등 유형별 1:1 문의 등록",
         figmaNodeId: F.SUPPORT,
+        spec: {
+          id: "F-INQ001",
+          status: "완료",
+          priority: 1,
+          userRoles: ["제휴사 본사 담당자", "제휴사 매장 담당자"],
+          summary:
+            "정산·수수료·포인트 등 유형별로 1:1 문의를 등록하고 처리 현황을 조회한다.",
+          subFeatures: [
+            {
+              no: 1,
+              id: "S-INQ01",
+              title: "문의 유형 선택",
+              description:
+                "정산·수수료·포인트·기타 중 문의 유형을 선택하여 문의를 등록한다.",
+            },
+            {
+              no: 2,
+              id: "S-INQ02",
+              title: "문의 내역 조회",
+              description:
+                "등록한 문의의 처리 상태(접수/처리중/완료)를 목록으로 조회한다.",
+            },
+          ],
+        },
       },
     ],
   },
@@ -308,6 +406,30 @@ const categories: Category[] = [
         priority: "P0",
         description: "기프트포인트 발행·등록·소멸 정산 (요약/건별)",
         figmaNodeId: F.GIFT_POINT,
+        spec: {
+          id: "F-GIFT01",
+          status: "완료",
+          priority: 1,
+          userRoles: ["제휴사 본사 담당자"],
+          summary:
+            "기프트포인트 발행·등록·소멸 내역을 요약 및 건별로 조회하고 정산 내역을 확인한다.",
+          subFeatures: [
+            {
+              no: 1,
+              id: "S-GIFT01",
+              title: "요약 조회",
+              description:
+                "기간별 기프트포인트 발행·등록·소멸 합계를 요약 카드로 표시한다.",
+            },
+            {
+              no: 2,
+              id: "S-GIFT02",
+              title: "건별 조회",
+              description:
+                "기프트포인트 개별 거래 건을 일자·유형별로 목록 조회한다.",
+            },
+          ],
+        },
       },
       {
         name: "기프트포인트 취소요청",
@@ -317,6 +439,23 @@ const categories: Category[] = [
         priority: "P0",
         description: "기프트포인트 취소 요청 내역 조회",
         figmaNodeId: F.GIFT_POINT_CANCEL,
+        spec: {
+          id: "F-GIFT02",
+          status: "완료",
+          priority: 1,
+          userRoles: ["제휴사 본사 담당자"],
+          summary:
+            "기프트포인트 취소 요청 내역을 조회하고 요청 상태를 확인한다.",
+          subFeatures: [
+            {
+              no: 1,
+              id: "S-GIFT03",
+              title: "취소 요청 목록 조회",
+              description:
+                "기프트포인트 취소 요청 건을 상태(접수/처리중/완료)별로 조회한다.",
+            },
+          ],
+        },
       },
     ],
   },
@@ -342,6 +481,44 @@ const categories: Category[] = [
         priority: "P0",
         description: "일자별·매장별 적립/사용 정산 내역",
         figmaNodeId: F.SETTLEMENT_FLOW,
+        spec: {
+          id: "F-SETL01",
+          status: "완료",
+          priority: 1,
+          userRoles: ["제휴사 본사 담당자", "제휴사 매장 담당자"],
+          summary:
+            "기간·브랜드·매장 기준으로 포인트 적립·사용·취소 정산 내역을 일자별·매장별로 조회하고 엑셀로 다운로드한다.",
+          subFeatures: [
+            {
+              no: 1,
+              id: "S-SETL01",
+              title: "기간·필터 조건 설정",
+              description:
+                "조회 기간(전월/3개월/6개월/당해년도)과 브랜드·매장·거래유형을 선택하여 조건을 설정한다.",
+            },
+            {
+              no: 2,
+              id: "S-SETL02",
+              title: "정산 내역 목록 조회",
+              description:
+                "설정한 조건에 따라 일자별·매장별 적립/사용/취소 건수·포인트·수수료를 테이블로 표시한다.",
+            },
+            {
+              no: 3,
+              id: "S-SETL03",
+              title: "합계 행 표시",
+              description:
+                "조회된 내역의 건수·포인트·수수료 합계를 테이블 하단에 고정 표시한다.",
+            },
+            {
+              no: 4,
+              id: "S-SETL04",
+              title: "엑셀 다운로드",
+              description:
+                "조회된 정산 내역을 xlsx 파일로 다운로드하고 다운로드 이력을 기록한다.",
+            },
+          ],
+        },
       },
       {
         name: "포인트 내역",
@@ -442,10 +619,14 @@ const categories: Category[] = [
   },
 ];
 
+/* ───────────────────────── Computed ───────────────────────────── */
+
 const allFeatures = categories.flatMap((c) => c.features);
 const doneCount = allFeatures.filter((f) => f.status === "done").length;
 const totalCount = allFeatures.length;
 const progressPct = Math.round((doneCount / totalCount) * 100);
+
+/* ───────────────────────── Sub-components ─────────────────────── */
 
 function StatusBadge({ status }: { status: FeatureStatus }) {
   if (status === "done") {
@@ -470,47 +651,263 @@ function StatusBadge({ status }: { status: FeatureStatus }) {
 }
 
 function PriorityBadge({ priority }: { priority: Priority }) {
-  if (priority === "P0") {
+  if (priority === "P0")
     return (
-      <span
-        className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold"
-        style={{ backgroundColor: "#FDE9FA", color: "#C71BAF" }}
-      >
-        P0
-      </span>
+      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold" style={{ backgroundColor: "#FDE9FA", color: "#C71BAF" }}>P0</span>
     );
-  }
-  if (priority === "P1") {
+  if (priority === "P1")
     return (
-      <span
-        className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold"
-        style={{ backgroundColor: "#E5E9FF", color: "#2142FF" }}
-      >
-        P1
-      </span>
+      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-bold" style={{ backgroundColor: "#E5E9FF", color: "#2142FF" }}>P1</span>
     );
-  }
   return (
-    <span
-      className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
-      style={{ backgroundColor: "#EDF0F5", color: "#676E82" }}
-    >
-      Later
-    </span>
+    <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium" style={{ backgroundColor: "#EDF0F5", color: "#676E82" }}>Later</span>
   );
 }
 
 function FigmaIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 38 57" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M19 28.5C19 25.9804 20.0009 23.5641 21.7825 21.7825C23.5641 20.0009 25.9804 19 28.5 19C31.0196 19 33.4359 20.0009 35.2175 21.7825C36.9991 23.5641 38 25.9804 38 28.5C38 31.0196 36.9991 33.4359 35.2175 35.2175C33.4359 36.9991 31.0196 38 28.5 38C25.9804 38 23.5641 36.9991 21.7825 35.2175C20.0009 33.4359 19 31.0196 19 28.5Z" fill="#1ABCFE"/>
-      <path d="M0 47.5C0 44.9804 1.00089 42.5641 2.78249 40.7825C4.56408 39.0009 6.98044 38 9.5 38H19V47.5C19 50.0196 17.9991 52.4359 16.2175 54.2175C14.4359 55.9991 12.0196 57 9.5 57C6.98044 57 4.56408 55.9991 2.78249 54.2175C1.00089 52.4359 0 50.0196 0 47.5Z" fill="#0ACF83"/>
-      <path d="M19 0V19H28.5C31.0196 19 33.4359 17.9991 35.2175 16.2175C36.9991 14.4359 38 12.0196 38 9.5C38 6.98044 36.9991 4.56408 35.2175 2.78249C33.4359 1.00089 31.0196 0 28.5 0H19Z" fill="#FF7262"/>
-      <path d="M0 9.5C0 12.0196 1.00089 14.4359 2.78249 16.2175C4.56408 17.9991 6.98044 19 9.5 19H19V0H9.5C6.98044 0 4.56408 1.00089 2.78249 2.78249C1.00089 4.56408 0 6.98044 0 9.5Z" fill="#F24E1E"/>
-      <path d="M0 28.5C0 31.0196 1.00089 33.4359 2.78249 35.2175C4.56408 36.9991 6.98044 38 9.5 38H19V19H9.5C6.98044 19 4.56408 20.0009 2.78249 21.7825C1.00089 23.5641 0 25.9804 0 28.5Z" fill="#A259FF"/>
+    <svg width="14" height="14" viewBox="0 0 38 57" fill="none">
+      <path d="M19 28.5C19 25.98 20 23.56 21.78 21.78C23.56 20 25.98 19 28.5 19C31.02 19 33.44 20 35.22 21.78C37 23.56 38 25.98 38 28.5C38 31.02 37 33.44 35.22 35.22C33.44 37 31.02 38 28.5 38C25.98 38 23.56 37 21.78 35.22C20 33.44 19 31.02 19 28.5Z" fill="#1ABCFE"/>
+      <path d="M0 47.5C0 44.98 1 42.56 2.78 40.78C4.56 39 6.98 38 9.5 38H19V47.5C19 50.02 18 52.44 16.22 54.22C14.44 56 12.02 57 9.5 57C6.98 57 4.56 56 2.78 54.22C1 52.44 0 50.02 0 47.5Z" fill="#0ACF83"/>
+      <path d="M19 0V19H28.5C31.02 19 33.44 18 35.22 16.22C37 14.44 38 12.02 38 9.5C38 6.98 37 4.56 35.22 2.78C33.44 1 31.02 0 28.5 0H19Z" fill="#FF7262"/>
+      <path d="M0 9.5C0 12.02 1 14.44 2.78 16.22C4.56 18 6.98 19 9.5 19H19V0H9.5C6.98 0 4.56 1 2.78 2.78C1 4.56 0 6.98 0 9.5Z" fill="#F24E1E"/>
+      <path d="M0 28.5C0 31.02 1 33.44 2.78 35.22C4.56 37 6.98 38 9.5 38H19V19H9.5C6.98 19 4.56 20 2.78 21.78C1 23.56 0 25.98 0 28.5Z" fill="#A259FF"/>
     </svg>
   );
 }
+
+function DocIcon({ active }: { active: boolean }) {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z"
+        stroke={active ? "#2142FF" : "#BFC5D2"}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill={active ? "#E5E9FF" : "none"}
+      />
+      <path d="M14 2V8H20" stroke={active ? "#2142FF" : "#BFC5D2"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M16 13H8" stroke={active ? "#2142FF" : "#BFC5D2"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M16 17H8" stroke={active ? "#2142FF" : "#BFC5D2"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M10 9H9H8" stroke={active ? "#2142FF" : "#BFC5D2"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+function SpecStatusBadge({ status }: { status: SpecStatus }) {
+  const styles: Record<SpecStatus, { bg: string; color: string }> = {
+    시작전: { bg: "#EDF0F5", color: "#676E82" },
+    진행중: { bg: "#FFF4E5", color: "#B45309" },
+    완료: { bg: "#DDF6EA", color: "#00A862" },
+  };
+  const s = styles[status];
+  return (
+    <span className="px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: s.bg, color: s.color }}>
+      {status}
+    </span>
+  );
+}
+
+function PriorityBars({ priority }: { priority: SpecPriority }) {
+  return (
+    <span className="inline-flex items-end gap-0.5 ml-1">
+      {([1, 2, 3] as SpecPriority[]).map((i) => (
+        <span
+          key={i}
+          className="inline-block rounded-sm"
+          style={{
+            width: 5,
+            height: i === 1 ? 8 : i === 2 ? 12 : 16,
+            backgroundColor: i <= priority ? "#ED27CF" : "#EDF0F5",
+          }}
+        />
+      ))}
+    </span>
+  );
+}
+
+/* ─────────────────── Spec Panel (right slide-in) ─────────────── */
+
+function SpecPanel({
+  feature,
+  onClose,
+}: {
+  feature: Feature;
+  onClose: () => void;
+}) {
+  const spec = feature.spec!;
+  return (
+    <>
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 z-40"
+        style={{ backgroundColor: "rgba(0,0,0,0.18)" }}
+        onClick={onClose}
+      />
+      {/* Panel */}
+      <div
+        className="fixed right-0 top-0 h-full z-50 flex flex-col"
+        style={{
+          width: 480,
+          backgroundColor: "#FFFFFF",
+          boxShadow: "-4px 0 32px rgba(0,0,0,0.14)",
+        }}
+      >
+        {/* Panel header */}
+        <div
+          className="flex items-center gap-2 px-5 py-3 shrink-0"
+          style={{ borderBottom: "1px solid #EDF0F5" }}
+        >
+          <button
+            onClick={onClose}
+            className="flex items-center justify-center w-7 h-7 rounded-lg text-lg leading-none hover:bg-[#F5F6FA] transition-colors"
+            style={{ color: "#676E82" }}
+          >
+            ×
+          </button>
+          <span className="text-xs" style={{ color: "#9D9D9D" }}>
+            기능명세서&nbsp;/&nbsp;
+            <span style={{ color: "#434343" }}>{feature.name}</span>
+          </span>
+          <div className="ml-auto flex gap-2">
+            <button
+              className="px-3 py-1.5 rounded-lg text-xs font-medium border"
+              style={{ borderColor: "#D8DCE5", color: "#676E82" }}
+            >
+              거절
+            </button>
+            <button
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold"
+              style={{ backgroundColor: "#1E192A", color: "#FFFFFF" }}
+            >
+              승인
+            </button>
+          </div>
+        </div>
+
+        {/* Scrollable content */}
+        <div className="flex-1 overflow-y-auto px-6 py-5 space-y-5">
+          {/* Title */}
+          <h2 className="text-2xl font-bold leading-snug" style={{ color: "#000000" }}>
+            {feature.name}
+          </h2>
+
+          {/* Meta row */}
+          <div className="flex items-center gap-3 flex-wrap text-xs" style={{ color: "#676E82" }}>
+            <span>
+              ID&nbsp;
+              <span className="font-mono font-semibold" style={{ color: "#434343" }}>
+                {spec.id}
+              </span>
+            </span>
+            <span style={{ color: "#D8DCE5" }}>|</span>
+            <span className="flex items-center gap-1.5">
+              상태&nbsp;<SpecStatusBadge status={spec.status} />
+            </span>
+            <span style={{ color: "#D8DCE5" }}>|</span>
+            <span className="flex items-center">
+              중요도<PriorityBars priority={spec.priority} />
+            </span>
+          </div>
+
+          {/* User roles */}
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-xs shrink-0" style={{ color: "#676E82" }}>
+              사용자 역할
+            </span>
+            {spec.userRoles.map((role) => (
+              <span
+                key={role}
+                className="px-2.5 py-1 rounded-full text-xs font-medium"
+                style={{ backgroundColor: "#EDF0F5", color: "#434343" }}
+              >
+                {role}
+              </span>
+            ))}
+          </div>
+
+          {/* Summary */}
+          <div
+            className="rounded-xl p-4 text-sm leading-relaxed"
+            style={{ backgroundColor: "#F5F6FA", color: "#434343" }}
+          >
+            {spec.summary}
+          </div>
+
+          {/* Sub features */}
+          {spec.subFeatures.length > 0 && (
+            <div>
+              <h3 className="text-sm font-semibold mb-3" style={{ color: "#000000" }}>
+                연결된 상세 기능
+              </h3>
+              <div className="space-y-2">
+                {spec.subFeatures.map((sub) => (
+                  <div
+                    key={sub.id}
+                    className="rounded-xl p-4"
+                    style={{ border: "1px solid #EDF0F5" }}
+                  >
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-sm font-semibold" style={{ color: "#000000" }}>
+                        {sub.no}.&nbsp;&nbsp;{sub.title}
+                      </span>
+                      <span
+                        className="text-[11px] font-mono"
+                        style={{ color: "#9D9D9D" }}
+                      >
+                        {sub.id}
+                      </span>
+                    </div>
+                    <p className="text-xs leading-relaxed" style={{ color: "#676E82" }}>
+                      {sub.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Comment section */}
+          <div>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-semibold" style={{ color: "#000000" }}>
+                코멘트
+              </h3>
+              <button className="text-xs" style={{ color: "#9D9D9D" }}>
+                해결된 코멘트 보기
+              </button>
+            </div>
+            <div
+              className="flex items-center gap-2 rounded-xl px-3 py-2.5"
+              style={{ border: "1px solid #EDF0F5" }}
+            >
+              <input
+                type="text"
+                placeholder="코멘트를 입력하세요..."
+                className="flex-1 text-sm outline-none bg-transparent"
+                style={{ color: "#434343" }}
+              />
+              <button
+                className="px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0"
+                style={{ backgroundColor: "#EDF0F5", color: "#676E82" }}
+              >
+                등록
+              </button>
+            </div>
+            <p className="text-xs text-center mt-5" style={{ color: "#BFC5D2" }}>
+              코멘트가 없습니다.
+            </p>
+          </div>
+
+          <div className="h-6" />
+        </div>
+      </div>
+    </>
+  );
+}
+
+/* ─────────────── Category progress bar ───────────────────────── */
 
 function CategoryProgressBar({ category }: { category: Category }) {
   const done = category.features.filter((f) => f.status === "done").length;
@@ -520,16 +917,13 @@ function CategoryProgressBar({ category }: { category: Category }) {
 
   return (
     <div className="flex items-center gap-3">
-      <span className="w-32 text-right text-sm shrink-0" style={{ color: "#434343" }}>
+      <span className="w-36 text-right text-sm shrink-0" style={{ color: "#434343" }}>
         {category.icon} {category.name}
       </span>
       <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ backgroundColor: "#EDF0F5" }}>
         <div
           className="h-full rounded-full transition-all"
-          style={{
-            width: `${pct}%`,
-            backgroundColor: isComplete ? "#00A862" : "#ED27CF",
-          }}
+          style={{ width: `${pct}%`, backgroundColor: isComplete ? "#00A862" : "#ED27CF" }}
         />
       </div>
       <span className="w-20 text-xs shrink-0" style={{ color: "#676E82" }}>
@@ -539,36 +933,34 @@ function CategoryProgressBar({ category }: { category: Category }) {
   );
 }
 
+/* ───────────────────── Main Page ──────────────────────────────── */
+
 export default function StatusBoard() {
+  const [openSpec, setOpenSpec] = useState<Feature | null>(null);
+
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-6">
+    <div className="p-6 max-w-6xl mx-auto space-y-6">
       {/* 페이지 헤더 */}
       <div>
-        <h1 className="text-xl font-bold" style={{ color: "#000000" }}>
-          현황판
-        </h1>
+        <h1 className="text-xl font-bold" style={{ color: "#000000" }}>현황판</h1>
         <p className="text-sm mt-1" style={{ color: "#676E82" }}>
           파트너센터 목업 구현 진행 현황 — WBS 기준
         </p>
       </div>
 
-      {/* KPI 카드 4개 */}
+      {/* KPI 카드 */}
       <div className="grid grid-cols-4 gap-4">
-        <div className="rounded-xl p-4" style={{ backgroundColor: "#FFFFFF", border: "1px solid #EDF0F5" }}>
-          <p className="text-xs font-medium mb-1" style={{ color: "#676E82" }}>전체 화면</p>
-          <p className="text-3xl font-bold" style={{ color: "#000000" }}>{totalCount}</p>
-          <p className="text-xs mt-1" style={{ color: "#9D9D9D" }}>목업 대상 페이지</p>
-        </div>
-        <div className="rounded-xl p-4" style={{ backgroundColor: "#FFFFFF", border: "1px solid #EDF0F5" }}>
-          <p className="text-xs font-medium mb-1" style={{ color: "#676E82" }}>구현 완료</p>
-          <p className="text-3xl font-bold" style={{ color: "#00A862" }}>{doneCount}</p>
-          <p className="text-xs mt-1" style={{ color: "#9D9D9D" }}>화면 완성</p>
-        </div>
-        <div className="rounded-xl p-4" style={{ backgroundColor: "#FFFFFF", border: "1px solid #EDF0F5" }}>
-          <p className="text-xs font-medium mb-1" style={{ color: "#676E82" }}>구현 예정</p>
-          <p className="text-3xl font-bold" style={{ color: "#9D9D9D" }}>{totalCount - doneCount}</p>
-          <p className="text-xs mt-1" style={{ color: "#9D9D9D" }}>플레이스홀더</p>
-        </div>
+        {[
+          { label: "전체 화면", value: totalCount, sub: "목업 대상 페이지", color: "#000000" },
+          { label: "구현 완료", value: doneCount, sub: "화면 완성", color: "#00A862" },
+          { label: "구현 예정", value: totalCount - doneCount, sub: "플레이스홀더", color: "#9D9D9D" },
+        ].map((card) => (
+          <div key={card.label} className="rounded-xl p-4" style={{ backgroundColor: "#FFFFFF", border: "1px solid #EDF0F5" }}>
+            <p className="text-xs font-medium mb-1" style={{ color: "#676E82" }}>{card.label}</p>
+            <p className="text-3xl font-bold" style={{ color: card.color }}>{card.value}</p>
+            <p className="text-xs mt-1" style={{ color: "#9D9D9D" }}>{card.sub}</p>
+          </div>
+        ))}
         <div className="rounded-xl p-4" style={{ backgroundColor: "#FFFFFF", border: "1px solid #EDF0F5" }}>
           <p className="text-xs font-medium mb-2" style={{ color: "#676E82" }}>전체 진행률</p>
           <p className="text-3xl font-bold" style={{ color: "#ED27CF" }}>{progressPct}%</p>
@@ -598,10 +990,7 @@ export default function StatusBoard() {
                 style={{ backgroundColor: "#F5F6FA", borderBottom: "1px solid #EDF0F5" }}
               >
                 <div className="flex items-center gap-2">
-                  <span
-                    className="text-[10px] font-bold px-1.5 py-0.5 rounded"
-                    style={{ backgroundColor: "#E5E9FF", color: "#2142FF" }}
-                  >
+                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded" style={{ backgroundColor: "#E5E9FF", color: "#2142FF" }}>
                     {cat.wbs}
                   </span>
                   <span className="text-sm font-semibold" style={{ color: "#262626" }}>
@@ -623,6 +1012,7 @@ export default function StatusBoard() {
                     <th className="px-3 py-2.5 text-left text-xs font-medium" style={{ color: "#9D9D9D" }}>설명</th>
                     <th className="px-3 py-2.5 text-left text-xs font-medium w-20" style={{ color: "#9D9D9D" }}>상태</th>
                     <th className="px-3 py-2.5 text-left text-xs font-medium w-12" style={{ color: "#9D9D9D" }}>우선순위</th>
+                    <th className="px-3 py-2.5 text-center text-xs font-medium w-16" style={{ color: "#9D9D9D" }}>기능명세</th>
                     <th className="px-3 py-2.5 text-center text-xs font-medium w-16" style={{ color: "#9D9D9D" }}>기획서</th>
                     <th className="px-4 py-2.5 text-right text-xs font-medium w-20" style={{ color: "#9D9D9D" }}>바로가기</th>
                   </tr>
@@ -647,6 +1037,28 @@ export default function StatusBoard() {
                       </td>
                       <td className="px-3 py-3"><StatusBadge status={feature.status} /></td>
                       <td className="px-3 py-3"><PriorityBadge priority={feature.priority} /></td>
+
+                      {/* 기능명세서 */}
+                      <td className="px-3 py-3 text-center">
+                        {feature.spec ? (
+                          <button
+                            onClick={() => setOpenSpec(feature)}
+                            className="inline-flex items-center justify-center w-7 h-7 rounded-lg transition-colors hover:bg-[#E5E9FF]"
+                            title="기능명세서 보기"
+                          >
+                            <DocIcon active={true} />
+                          </button>
+                        ) : (
+                          <span
+                            className="inline-flex items-center justify-center w-7 h-7 rounded-lg cursor-not-allowed"
+                            title="기능명세서 없음"
+                          >
+                            <DocIcon active={false} />
+                          </span>
+                        )}
+                      </td>
+
+                      {/* 기획서 */}
                       <td className="px-3 py-3 text-center">
                         <a
                           href={figmaUrl(feature.figmaNodeId)}
@@ -658,8 +1070,10 @@ export default function StatusBoard() {
                           <FigmaIcon />
                         </a>
                       </td>
+
+                      {/* 바로가기 */}
                       <td className="px-4 py-3 text-right">
-                        {feature.status === "done" ? (
+                        {feature.status === "done" && feature.route ? (
                           <Link
                             to={feature.route}
                             className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors hover:opacity-80"
@@ -686,6 +1100,11 @@ export default function StatusBoard() {
       </div>
 
       <div className="h-8" />
+
+      {/* 기능명세서 패널 */}
+      {openSpec && openSpec.spec && (
+        <SpecPanel feature={openSpec} onClose={() => setOpenSpec(null)} />
+      )}
     </div>
   );
 }

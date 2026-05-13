@@ -132,9 +132,9 @@ export default function Sidebar() {
                 {group.group}
               </span>
             </div>
-            {group.items.map((item) => (
+            {group.items.map((item, itemIdx) => (
               <NavLink
-                key={item.to}
+                key={`${group.group}__${itemIdx}`}
                 to={item.to}
                 end={item.to === "/admin"}
                 className={({ isActive }) =>
