@@ -42,6 +42,76 @@ type Category = {
   features: Feature[];
 };
 
+/* ─────────────────────── Discussion Log Types ───────────────────── */
+
+type DiscussionType = "논의 필요" | "논의 완료" | "반영 완료" | "보류" | "후속 과제";
+type ProcessStatus = "완료" | "진행" | "대기";
+
+type DiscussionItem = {
+  date: string;
+  type: DiscussionType;
+  refNo: string;
+  content: string;
+  action: string;
+  owner: string;
+  status: ProcessStatus;
+};
+
+/* ─────────────────────── Discussion Log Data ────────────────────── */
+
+const discussionLog: DiscussionItem[] = [
+  {
+    date: "2026-05-12",
+    type: "반영 완료",
+    refNo: "#1",
+    content:
+      "파트너센터 ↔ 브랜드 프로필 연계 구조로 방향 변경\n→ 브랜드 프로필 생성 후 파트너센터 이용 필수",
+    action: "FRD FR-PRE01 반영 완료. 비즈니스센터 FRD 연동 섹션 업데이트",
+    owner: "",
+    status: "완료",
+  },
+  {
+    date: "2026-05-12",
+    type: "반영 완료",
+    refNo: "#2",
+    content:
+      "센터별 권한 체계 분리 운영으로 방향 결정\n→ 브랜드 프로필 주/부관리자 + 파트너센터 별도 권한 이원화",
+    action: "FRD FR-AD03 권한 모델 반영 완료",
+    owner: "",
+    status: "완료",
+  },
+  {
+    date: "2026-05-12",
+    type: "반영 완료",
+    refNo: "#3",
+    content:
+      "브랜드 프로필 구성원 초대 정책 수립\n→ 동일 사업자 소속만 초대 권장 (시스템 제한 아닌 정책·안내)",
+    action: "비즈니스센터 FRD 초대 정책 안내 문구 추가 필요",
+    owner: "",
+    status: "진행",
+  },
+  {
+    date: "2026-05-12",
+    type: "보류",
+    refNo: "#4",
+    content:
+      "사업자 번호 단위 통합 관리 단위('사업자 통') — 현 시점 보류\n→ 파트너센터 오픈 이후 별도 검토",
+    action: "파트너센터 오픈 타임라인 영향 없음. 이후 별도 논의 예정",
+    owner: "",
+    status: "대기",
+  },
+  {
+    date: "2026-05-12",
+    type: "논의 필요",
+    refNo: "#5",
+    content:
+      "브랜드 프로필 가입 플로우 > 재직 인증 선택 사항화 검토\n→ 미결 (우선순위 낮음)",
+    action: "파트너센터 기획 시 선택화 방향 고려. 방향성 결정 시점 논의 필요",
+    owner: "",
+    status: "진행",
+  },
+];
+
 /* ───────────────────────────── Figma ───────────────────────────── */
 
 const FIGMA_BASE =
@@ -1026,6 +1096,320 @@ function SpecPanel({
   );
 }
 
+/* ─────────────── Discussion Log Section ──────────────────────── */
+
+const DISC_TYPE_STYLE: Record<
+  DiscussionType,
+  { bg: string; text: string; dot: string }
+> = {
+  "논의 필요":  { bg: "#FFF3E0", text: "#E65100", dot: "#E65100" },
+  "논의 완료":  { bg: "#E3F2FD", text: "#1565C0", dot: "#1565C0" },
+  "반영 완료":  { bg: "#E8F5E9", text: "#1B5E20", dot: "#00A862" },
+  "보류":       { bg: "#F5F5F5", text: "#757575", dot: "#BDBDBD" },
+  "후속 과제":  { bg: "#F3E5F5", text: "#6A1B9A", dot: "#AB47BC" },
+};
+
+const STATUS_STYLE: Record<ProcessStatus, { icon: string; color: string }> = {
+  완료: { icon: "○", color: "#00A862" },
+  진행: { icon: "△", color: "#E67E22" },
+  대기: { icon: "×", color: "#BDBDBD" },
+};
+
+function DiscussionTypeBadge({ type }: { type: DiscussionType }) {
+  const s = DISC_TYPE_STYLE[type];
+  return (
+    <span
+      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap"
+      style={{ backgroundColor: s.bg, color: s.text }}
+    >
+      <span
+        className="w-1.5 h-1.5 rounded-full shrink-0"
+        style={{ backgroundColor: s.dot }}
+      />
+      {type}
+    </span>
+  );
+}
+
+function DiscussionLogSection() {
+  const [newContent, setNewContent] = useState("");
+  const [newType, setNewType] = useState<DiscussionType>("논의 필요");
+  const [newAction, setNewAction] = useState("");
+  const [newOwner, setNewOwner] = useState("");
+  const [items, setItems] = useState<DiscussionItem[]>(discussionLog);
+  const [showAdd, setShowAdd] = useState(false);
+
+  const counts = {
+    "논의 필요": items.filter((i) => i.type === "논의 필요").length,
+    "반영 완료": items.filter((i) => i.type === "반영 완료").length,
+    "보류·후속":
+      items.filter((i) => i.type === "보류").length +
+      items.filter((i) => i.type === "후속 과제").length,
+  };
+
+  // group by date
+  const grouped = items.reduce<Record<string, DiscussionItem[]>>((acc, item) => {
+    (acc[item.date] = acc[item.date] || []).push(item);
+    return acc;
+  }, {});
+  const sortedDates = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
+
+  const handleAdd = () => {
+    if (!newContent.trim()) return;
+    const today = new Date().toISOString().slice(0, 10);
+    setItems((prev) => [
+      ...prev,
+      {
+        date: today,
+        type: newType,
+        refNo: "",
+        content: newContent.trim(),
+        action: newAction.trim(),
+        owner: newOwner.trim(),
+        status: newType === "반영 완료" ? "완료" : "진행",
+      },
+    ]);
+    setNewContent("");
+    setNewAction("");
+    setNewOwner("");
+    setShowAdd(false);
+  };
+
+  return (
+    <div>
+      {/* 섹션 헤더 */}
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="text-sm font-semibold" style={{ color: "#000000" }}>
+          논의 일지
+        </h2>
+        <button
+          onClick={() => setShowAdd((v) => !v)}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors"
+          style={{
+            backgroundColor: showAdd ? "#EDF0F5" : "#1E192A",
+            color: showAdd ? "#676E82" : "#FFFFFF",
+          }}
+        >
+          {showAdd ? "취소" : "+ 항목 추가"}
+        </button>
+      </div>
+
+      {/* 요약 카드 */}
+      <div className="grid grid-cols-3 gap-3 mb-4">
+        {(
+          [
+            { label: "논의 필요", count: counts["논의 필요"], bg: "#FFF3E0", color: "#E65100" },
+            { label: "반영 완료", count: counts["반영 완료"], bg: "#E8F5E9", color: "#1B5E20" },
+            { label: "보류 · 후속", count: counts["보류·후속"],  bg: "#F5F5F5", color: "#757575" },
+          ] as const
+        ).map((card) => (
+          <div
+            key={card.label}
+            className="rounded-xl px-4 py-3 flex items-center gap-3"
+            style={{ backgroundColor: card.bg }}
+          >
+            <span className="text-2xl font-bold" style={{ color: card.color }}>
+              {card.count}
+            </span>
+            <span className="text-xs font-medium" style={{ color: card.color }}>
+              {card.label}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {/* 항목 추가 폼 */}
+      {showAdd && (
+        <div
+          className="rounded-xl p-4 mb-4 space-y-3"
+          style={{ backgroundColor: "#FAFAFA", border: "1px solid #EDF0F5" }}
+        >
+          <p className="text-xs font-semibold" style={{ color: "#434343" }}>
+            새 항목 추가
+          </p>
+          <div className="flex gap-2">
+            <select
+              value={newType}
+              onChange={(e) => setNewType(e.target.value as DiscussionType)}
+              className="text-xs rounded-lg px-2 py-1.5 outline-none border"
+              style={{ borderColor: "#EDF0F5", color: "#434343", backgroundColor: "#FFFFFF" }}
+            >
+              {(["논의 필요", "논의 완료", "반영 완료", "보류", "후속 과제"] as DiscussionType[]).map(
+                (t) => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                )
+              )}
+            </select>
+            <input
+              type="text"
+              placeholder="담당자 (선택)"
+              value={newOwner}
+              onChange={(e) => setNewOwner(e.target.value)}
+              className="text-xs rounded-lg px-3 py-1.5 outline-none border"
+              style={{ borderColor: "#EDF0F5", color: "#434343", backgroundColor: "#FFFFFF", width: 120 }}
+            />
+          </div>
+          <textarea
+            placeholder="논의 · 반영 내용을 입력하세요"
+            value={newContent}
+            onChange={(e) => setNewContent(e.target.value)}
+            rows={2}
+            className="w-full text-xs rounded-lg px-3 py-2 outline-none border resize-none"
+            style={{ borderColor: newContent ? "#2142FF" : "#EDF0F5", color: "#434343", backgroundColor: "#FFFFFF" }}
+          />
+          <textarea
+            placeholder="결정 사항 / 액션 아이템 (선택)"
+            value={newAction}
+            onChange={(e) => setNewAction(e.target.value)}
+            rows={1}
+            className="w-full text-xs rounded-lg px-3 py-2 outline-none border resize-none"
+            style={{ borderColor: "#EDF0F5", color: "#434343", backgroundColor: "#FFFFFF" }}
+          />
+          <div className="flex justify-end">
+            <button
+              onClick={handleAdd}
+              disabled={!newContent.trim()}
+              className="px-4 py-1.5 rounded-lg text-xs font-semibold transition-colors"
+              style={{
+                backgroundColor: newContent.trim() ? "#1E192A" : "#EDF0F5",
+                color: newContent.trim() ? "#FFFFFF" : "#9D9D9D",
+                cursor: newContent.trim() ? "pointer" : "default",
+              }}
+            >
+              등록
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 날짜별 테이블 */}
+      <div className="rounded-xl overflow-hidden" style={{ border: "1px solid #EDF0F5" }}>
+        {/* 테이블 헤더 */}
+        <div
+          className="grid text-xs font-medium"
+          style={{
+            gridTemplateColumns: "100px 110px 56px 1fr 1fr 72px 52px",
+            backgroundColor: "#F5F6FA",
+            borderBottom: "1px solid #EDF0F5",
+            color: "#9D9D9D",
+            padding: "8px 16px",
+          }}
+        >
+          <span>날짜</span>
+          <span>구분</span>
+          <span className="text-center">No.</span>
+          <span>논의 · 반영 내용</span>
+          <span>결정 사항 / 액션</span>
+          <span className="text-center">담당자</span>
+          <span className="text-center">상태</span>
+        </div>
+
+        {/* 날짜 그룹 */}
+        {sortedDates.map((date, di) => (
+          <div key={date}>
+            {grouped[date].map((item, ii) => (
+              <div
+                key={`${date}-${ii}`}
+                className="grid items-start"
+                style={{
+                  gridTemplateColumns: "100px 110px 56px 1fr 1fr 72px 52px",
+                  borderBottom:
+                    di < sortedDates.length - 1 || ii < grouped[date].length - 1
+                      ? "1px solid #F5F6FA"
+                      : "none",
+                  padding: "10px 16px",
+                  backgroundColor: "#FFFFFF",
+                }}
+              >
+                {/* 날짜 — 그룹 첫 행만 표시 */}
+                <span
+                  className="text-xs pt-0.5"
+                  style={{ color: ii === 0 ? "#1F3864" : "transparent", fontWeight: ii === 0 ? 600 : 400 }}
+                >
+                  {date}
+                </span>
+
+                {/* 구분 배지 */}
+                <div className="pt-0.5">
+                  <DiscussionTypeBadge type={item.type} />
+                </div>
+
+                {/* 참고 No. */}
+                <span
+                  className="text-xs text-center pt-1"
+                  style={{ color: "#1A5276", fontWeight: 500 }}
+                >
+                  {item.refNo}
+                </span>
+
+                {/* 내용 */}
+                <span
+                  className="text-xs leading-relaxed"
+                  style={{ color: "#000000", whiteSpace: "pre-line" }}
+                >
+                  {item.content}
+                </span>
+
+                {/* 결정사항/액션 */}
+                <span className="text-xs leading-relaxed" style={{ color: "#676E82" }}>
+                  {item.action}
+                </span>
+
+                {/* 담당자 */}
+                <span
+                  className="text-xs text-center pt-0.5"
+                  style={{ color: "#434343" }}
+                >
+                  {item.owner || "—"}
+                </span>
+
+                {/* 처리 상태 */}
+                <span
+                  className="text-sm text-center font-bold pt-0.5"
+                  style={{ color: STATUS_STYLE[item.status].color }}
+                >
+                  {STATUS_STYLE[item.status].icon}
+                </span>
+              </div>
+            ))}
+
+            {/* 날짜 구분선 */}
+            {di < sortedDates.length - 1 && (
+              <div style={{ height: 1, backgroundColor: "#EDF0F5" }} />
+            )}
+          </div>
+        ))}
+
+        {items.length === 0 && (
+          <div className="py-10 text-center text-xs" style={{ color: "#BFC5D2" }}>
+            논의 항목이 없습니다.
+          </div>
+        )}
+      </div>
+
+      {/* 범례 */}
+      <div className="flex items-center gap-4 mt-2 px-1">
+        {(["논의 필요", "논의 완료", "반영 완료", "보류", "후속 과제"] as DiscussionType[]).map(
+          (t) => {
+            const s = DISC_TYPE_STYLE[t];
+            return (
+              <span key={t} className="flex items-center gap-1 text-xs" style={{ color: s.text }}>
+                <span className="w-2 h-2 rounded-full" style={{ backgroundColor: s.dot }} />
+                {t}
+              </span>
+            );
+          }
+        )}
+        <span className="ml-auto text-xs" style={{ color: "#BFC5D2" }}>
+          상태: ○ 완료 △ 진행 × 대기
+        </span>
+      </div>
+    </div>
+  );
+}
+
 /* ─────────────── Category progress bar ───────────────────────── */
 
 function CategoryProgressBar({ category }: { category: Category }) {
@@ -1217,6 +1601,9 @@ export default function StatusBoard() {
           ))}
         </div>
       </div>
+
+      {/* 논의 일지 */}
+      <DiscussionLogSection />
 
       <div className="h-8" />
 
