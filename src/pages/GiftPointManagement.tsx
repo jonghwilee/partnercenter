@@ -115,7 +115,7 @@ export default function GiftPointManagement() {
               <TableHeader>
                 <TableRow className="[&_th]:whitespace-nowrap [&_th]:text-xs">
                   <TableHead rowSpan={2} className="align-middle border-r bg-muted/20">
-                    정산년월
+                    정산월
                   </TableHead>
                   <TableHead rowSpan={2} className="align-middle border-r bg-muted/20">
                     제휴사
@@ -191,7 +191,7 @@ export default function GiftPointManagement() {
             <Table>
               <TableHeader>
                 <TableRow className="[&_th]:whitespace-nowrap [&_th]:text-xs">
-                  <TableHead>정산년월</TableHead>
+                  <TableHead>정산월</TableHead>
                   <TableHead>인증번호</TableHead>
                   <TableHead>제휴사</TableHead>
                   <TableHead>상품구분</TableHead>

@@ -207,7 +207,7 @@ export default function PointConversion() {
             <Table>
               <TableHeader>
                 <TableRow className="[&_th]:whitespace-nowrap [&_th]:text-xs">
-                  <TableHead>정산기간</TableHead>
+                  <TableHead>정산일자</TableHead>
                   <TableHead>제휴사명</TableHead>
                   <TableHead className="text-right">유입 건수</TableHead>
                   <TableHead className="text-right">유입 포인트</TableHead>
@@ -258,7 +258,7 @@ export default function PointConversion() {
             <Table>
               <TableHeader>
                 <TableRow className="[&_th]:whitespace-nowrap [&_th]:text-xs">
-                  <TableHead>정산기간</TableHead>
+                  <TableHead>정산일자</TableHead>
                   <TableHead>제휴사명</TableHead>
                   <TableHead>거래 구분</TableHead>
                   <TableHead className="text-right">전환포인트</TableHead>
@@ -303,7 +303,7 @@ export default function PointConversion() {
             <Table>
               <TableHeader>
                 <TableRow className="[&_th]:whitespace-nowrap [&_th]:text-xs">
-                  <TableHead>정산기간</TableHead>
+                  <TableHead>정산일자</TableHead>
                   <TableHead>제휴사명</TableHead>
                   <TableHead>거래 구분</TableHead>
                   <TableHead>회원번호</TableHead>
