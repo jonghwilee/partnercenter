@@ -1281,7 +1281,7 @@ const menuScopeGroups: MenuScopeGroup[] = [
     menus: [
       {
         name: "대시보드",
-        access: ac("○", "—", "—", "○", "—", "—"),
+        access: ac("○", "—", "—", "—", "—", "—"),
         note: "구매·거래 실적 기반 집계. 본사 담당자 한정",
       },
       {
