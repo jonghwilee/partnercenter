@@ -21,7 +21,7 @@ export default function Header() {
             CJ ONE
           </span>
           <span className="text-sm font-semibold" style={{ color: "#FFFFFF" }}>
-            파트너센터
+            멤버십센터
           </span>
         </div>
       </div>

@@ -233,7 +233,7 @@ const discussionLog: DiscussionItem[] = [
 /* ───────────────────────────── Figma ───────────────────────────── */
 
 const FIGMA_BASE =
-  "https://www.figma.com/design/8UxCwhtN5D2EYaPevafhL0/CJ-ONE-%ED%8C%8C%ED%8A%B8%EB%84%88%EC%84%BC%ED%84%B0?node-id=";
+  "https://www.figma.com/design/8UxCwhtN5D2EYaPevafhL0/CJ-ONE-%EB%A9%A4%EB%B2%84%EC%8B%AD%EC%84%BC%ED%84%B0_%ED%99%94%EB%A9%B4%EC%84%A4%EA%B3%84?node-id=";
 
 const F = {
   // ① 기초 설계
@@ -270,6 +270,7 @@ const F = {
   SETTLEMENT_FLOW: "665-20737",
   SETTLEMENT_PROCESS: "665-20893",
   PARTNER_SETTLEMENT: "281-10028",
+  MEMBERSHIP_POINT_SETTLEMENT: "55-1517", // 멤버십 포인트 정산 (신규 — node ID 확인 필요)
 
   // ⑥ 올리브영 현대카드
   HYUNDAI_CARD: "55-1559",
@@ -322,14 +323,14 @@ const categories: Category[] = [
           priority: 1,
           userRoles: ["전체"],
           summary:
-            "파트너센터 상단에 고정되는 글로벌 네비게이션 바로, CJ ONE 로고·서비스명·버전 배지·계정 정보를 표시한다.",
+            "멤버십센터 상단에 고정되는 글로벌 네비게이션 바로, CJ ONE 로고·서비스명·버전 배지·계정 정보를 표시한다.",
           subFeatures: [
             {
               no: 1,
               id: "S-GNB01",
               title: "로고 및 서비스명 표시",
               description:
-                "CJ ONE 로고(그라디언트)와 '파트너센터' 서비스명을 좌측에 표시한다.",
+                "CJ ONE 로고(그라디언트)와 '멤버십센터' 서비스명을 좌측에 표시한다.",
             },
             {
               no: 2,
@@ -421,7 +422,7 @@ const categories: Category[] = [
         route: "/home",
         status: "planned",
         priority: "P0",
-        description: "파트너센터 메인 홈·랜딩 페이지",
+        description: "멤버십센터 메인 홈·랜딩 페이지",
         figmaNodeId: F.HOME,
       },
       {
@@ -430,7 +431,7 @@ const categories: Category[] = [
         route: "/support/notice",
         status: "planned",
         priority: "P0",
-        description: "파트너센터 공지사항 목록·상세",
+        description: "멤버십센터 공지사항 목록·상세",
         figmaNodeId: F.NOTICE,
       },
       {
@@ -576,7 +577,7 @@ const categories: Category[] = [
         route: "/admin",
         status: "planned",
         priority: "Later",
-        description: "파트너센터 어드민 관리 화면",
+        description: "멤버십센터 어드민 관리 화면",
         figmaNodeId: F.ADMIN,
       },
     ],
@@ -660,6 +661,57 @@ const categories: Category[] = [
         priority: "P0",
         description: "월별 정산 합계 요약",
         figmaNodeId: F.SETTLEMENT,
+      },
+      {
+        name: "멤버십 포인트 정산",
+        file: "MembershipPointSettlement.tsx",
+        route: "/settlement/membership-point",
+        status: "planned",
+        priority: "P0",
+        description: "브랜드별·매장별·포인트유형별·일자별 탭 조회 + 공문 다운로드",
+        figmaNodeId: F.MEMBERSHIP_POINT_SETTLEMENT,
+        spec: {
+          id: "F-MPST01",
+          status: "완료",
+          priority: 1,
+          userRoles: ["제휴사 본사 담당자", "제휴사 매장 담당자"],
+          summary:
+            "멤버십 포인트 정산 내역을 브랜드·매장·포인트유형·일자 기준 탭으로 조회하고 공문을 다운로드한다.",
+          subFeatures: [
+            {
+              no: 1,
+              id: "S-MPST01",
+              title: "브랜드별 조회",
+              description: "브랜드 기준으로 집계된 포인트 정산 내역을 조회한다.",
+            },
+            {
+              no: 2,
+              id: "S-MPST02",
+              title: "매장별 조회",
+              description: "매장 기준으로 집계된 포인트 정산 내역을 조회한다.",
+            },
+            {
+              no: 3,
+              id: "S-MPST03",
+              title: "포인트유형별 조회",
+              description:
+                "포인트 유형 드롭다운 + 조회 단위(제휴사/브랜드) 드롭다운으로 조건 설정 후 조회.",
+            },
+            {
+              no: 4,
+              id: "S-MPST04",
+              title: "일자별 조회",
+              description: "가용일자 기준 일자별 포인트 정산 내역을 조회한다.",
+            },
+            {
+              no: 5,
+              id: "S-MPST05",
+              title: "공문 다운로드",
+              description:
+                "공문 유형이 2개 이상인 경우 선택 팝업 노출. 선택한 공문 유형만 다운로드.",
+            },
+          ],
+        },
       },
       {
         name: "정산 상세",
@@ -1586,7 +1638,7 @@ function MenuScopeSection() {
       {/* 주석 */}
       <p className="text-xs mt-2 px-1" style={{ color: "#BFC5D2" }}>
         △ 조건부: 세부 계약 내용 또는 특정 제휴사 한정 적용 &nbsp;|&nbsp;
-        시스템 관리 메뉴(사용자·권한·접속 조회 등)는 파트너센터 어드민 화면에서 관리
+        시스템 관리 메뉴(사용자·권한·접속 조회 등)는 멤버십센터 어드민 화면에서 관리
       </p>
     </div>
   );
@@ -1908,7 +1960,7 @@ export default function StatusBoard() {
       <div>
         <h1 className="text-xl font-bold" style={{ color: "#000000" }}>현황판</h1>
         <p className="text-sm mt-1" style={{ color: "#676E82" }}>
-          파트너센터 목업 구현 진행 현황 — WBS 기준
+          멤버십센터 목업 구현 진행 현황 — WBS 기준
         </p>
       </div>
 
