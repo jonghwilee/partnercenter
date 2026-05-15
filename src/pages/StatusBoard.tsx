@@ -239,6 +239,7 @@ const F = {
   // ① 기초 설계
   GNB_SNB_GRID: "117-25832",
   COMMON_COMPONENTS: "117-22999",
+  TAB_COMPONENT: "2678-103695",
 
   // ⑧ 대시보드
   DASHBOARD: "55-1571",
@@ -270,7 +271,7 @@ const F = {
   SETTLEMENT_FLOW: "665-20737",
   SETTLEMENT_PROCESS: "665-20893",
   PARTNER_SETTLEMENT: "281-10028",
-  MEMBERSHIP_POINT_SETTLEMENT: "55-1517", // 멤버십 포인트 정산 (신규 — node ID 확인 필요)
+  MEMBERSHIP_POINT_SETTLEMENT: "2454-91898",
 
   // ⑥ 올리브영 현대카드
   HYUNDAI_CARD: "55-1559",
@@ -383,6 +384,15 @@ const categories: Category[] = [
         priority: "P0",
         description: "버튼·인풋·테이블·모달 등 UI 컴포넌트 라이브러리",
         figmaNodeId: F.COMMON_COMPONENTS,
+      },
+      {
+        name: "탭 컴포넌트",
+        file: "components/ui/tabs.tsx",
+        route: "",
+        status: "planned",
+        priority: "P0",
+        description: "멤버십 포인트 정산 등에서 사용하는 공통 탭 UI",
+        figmaNodeId: F.TAB_COMPONENT,
       },
     ],
   },
